@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI-Recognizable Color Swatches</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 2rem;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      margin-top: 3rem;
+      margin-bottom: 1rem;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 0.5rem;
+    }
+    .swatch-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 1rem;
+    }
+    .swatch {
+      background: white;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .color-box {
+      height: 100px;
+    }
+    .label {
+      padding: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>AI-Recognizable Color Swatches</h1>
+
+  <div id="container"></div>
+
+  <script>
+    const colors = {
+      "Reds": ["Crimson", "Firebrick", "IndianRed", "DarkRed", "LightCoral", "Salmon", "Tomato", "Red", "Maroon", "Brown", "RosyBrown", "LightSalmon", "DeepPink", "HotPink", "PaleVioletRed", "MediumVioletRed", "Coral", "DarkSalmon", "Burgundy", "MistyRose"],
+      "Oranges": ["OrangeRed", "DarkOrange", "Orange", "SandyBrown", "Peru", "Chocolate", "DarkGoldenrod", "Goldenrod", "PeachPuff", "PapayaWhip", "Moccasin", "NavajoWhite", "Bisque", "BlanchedAlmond", "BurlyWood", "Tan", "Copper", "Coral", "LightSalmon", "Tomato"],
+      "Yellows": ["Gold", "Yellow", "LightYellow", "LemonChiffon", "LightGoldenrodYellow", "PaleGoldenrod", "Khaki", "DarkKhaki", "Cornsilk", "FloralWhite", "OldLace", "Wheat", "Beige", "Ivory", "Mustard", "LightGoldenrod", "Cream", "LightKhaki", "Vanilla", "Butter"],
+      "Greens": ["Green", "DarkGreen", "ForestGreen", "SeaGreen", "MediumSeaGreen", "LightSeaGreen", "Lime", "LimeGreen", "PaleGreen", "SpringGreen", "MediumSpringGreen", "Olive", "DarkOliveGreen", "YellowGreen", "Chartreuse", "GreenYellow", "LawnGreen", "Honeydew", "OliveDrab", "Mint"],
+      "Blues": ["Blue", "DarkBlue", "Navy", "MidnightBlue", "RoyalBlue", "DodgerBlue", "CornflowerBlue", "SteelBlue", "LightSteelBlue", "SkyBlue", "DeepSkyBlue", "LightSkyBlue", "PowderBlue", "AliceBlue", "LightBlue", "CadetBlue", "MediumBlue", "SlateBlue", "Teal", "Turquoise"],
+      "Purples": ["Purple", "MediumPurple", "BlueViolet", "Indigo", "DarkViolet", "DarkOrchid", "MediumOrchid", "Orchid", "Violet", "Plum", "Thistle", "Lavender", "RebeccaPurple", "SlateBlue", "DarkSlateBlue", "MediumSlateBlue", "Amethyst", "Magenta", "Fuchsia", "Mauve"],
+      "Black/White/Gray": ["Black", "White", "Gray", "DarkGray", "DimGray", "LightGray", "SlateGray", "Gainsboro", "Silver", "LightSlateGray", "Snow", "GhostWhite", "WhiteSmoke", "Seashell", "Ivory", "AntiqueWhite"]
+    };
+
+    const customHex = {
+      Burgundy: "#800020",
+      Copper: "#b87333",
+      Mustard: "#ffdb58",
+      LightGoldenrod: "#fafad2",
+      Cream: "#fffdd0",
+      LightKhaki: "#f0e68c",
+      Vanilla: "#f3e5ab",
+      Butter: "#fff1a8",
+      Mint: "#98ff98",
+      Amethyst: "#9966cc",
+      Mauve: "#e0b0ff"
+    };
+
+    const container = document.getElementById("container");
+
+    for (const [category, colorList] of Object.entries(colors)) {
+      const header = document.createElement("h2");
+      header.textContent = category;
+      container.appendChild(header);
+
+      const grid = document.createElement("div");
+      grid.className = "swatch-grid";
+
+      for (const color of colorList) {
+        const swatch = document.createElement("div");
+        swatch.className = "swatch";
+
+        const box = document.createElement("div");
+        box.className = "color-box";
+        box.style.backgroundColor = customHex[color] || color;
+
+        const label = document.createElement("div");
+        label.className = "label";
+        label.textContent = color;
+
+        swatch.appendChild(box);
+        swatch.appendChild(label);
+        grid.appendChild(swatch);
+      }
+
+      container.appendChild(grid);
+    }
+  </script>
+
+</body>
+</html>
