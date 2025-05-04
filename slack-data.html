@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Support Guide - Interactive Webpages</title>
+  <style>
+    body {
+      background-color: #1a1a1a;
+      color: #f5f5f5;
+      font-family: 'Inter', sans-serif;
+      padding: 2rem;
+    }
+
+    h2 {
+      cursor: pointer;
+      background: #222;
+      padding: 1rem;
+      border-radius: 10px;
+      margin-bottom: 0.5rem;
+    }
+
+    .section {
+      background: rgba(25, 25, 25, 0.85);
+      padding: 1rem 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .visible {
+      display: block;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .faq-item {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-left: 4px solid #ff7e00;
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(255, 126, 0, 0.05);
+    }
+
+    ul {
+      padding-left: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    ul li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="flag-tasks-wrapper">
+    <h2 onclick="showOnly('flag-tasks')">How to Flag Tasks</h2>
+    <div id="flag-tasks" class="section">
+      <p>If you encounter a task that seems broken (for example, the webpage doesn’t open, nothing loads, or there’s no code), follow these steps:</p>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <p><strong>Step 1:</strong> Sometimes the issue is local. First, go through the <span style="color: #ff7e00; font-weight: 600;">"How to Handle Blockers"</span> section and see if anything there resolves your issue.</p>
+        </div>
+        <div class="faq-item">
+          <p><strong>Step 2:</strong> If the problem continues, drop the task link in the appropriate Slack channel. Ask if others are seeing the same thing.</p>
+        </div>
+        <div class="faq-item">
+          <p><strong>Step 3:</strong> If others confirm it’s broken, wait for a lead or QA to advise. They’ll let you know what to do next.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+	<div id="slack-questions-wrapper">
+	  <h2 onclick="showOnly('slack-questions')">How to Ask Questions in Slack</h2>
+	  <div id="slack-questions" class="section">
+		<div class="faq-list">
+			<p>Please follow this process so that we can minimize the number of Slack messages for everyone:</p>
+		  <div class="faq-item">
+			<p><strong>1. Before asking questions</strong>, check the instructions or feedback notes. A good rule of thumb:</p>
+			<ul>
+			  <li>Look through the instructions</li>
+			  <li>Review the canvas (<code>:canvas:</code> icon at the top of Slack)</li>
+			  <li>Search in Slack (Ctrl + F)</li>
+			</ul>
+		  </div>
+		  <div class="faq-item">
+			<p><strong>2. Ask your questions in our internal channel.</strong><br>The external channel is only for leads and QAs.</p>
+		  </div>
+		  <div class="faq-item">
+			<p><strong>3. Slack question format:</strong></p>
+			<ul>
+			  <li><strong>Summary of your question/concern:</strong> Be specific and concise so it's easy to scan. Avoid walls of text.<br>
+			  <em>Once resolved, edit your post to include <strong>RESOLVED</strong> at the end.</em></li>
+			  <li><strong>In the thread:</strong>
+				<ul>
+				  <li>Expand on your summary with more detail and context.</li>
+				  <li>Include task links and screenshots to help others assist you faster.</li>
+				</ul>
+			  </li>
+			  <li><strong>Who to tag:</strong>
+				<ul>
+				  <li><strong>@iwqas</strong> – for general QA questions</li>
+				  <li><strong>Quality lead</strong> – for escalations</li>
+				  <li><strong>Campaign lead</strong> – for admin or broader escalations</li>
+				</ul>
+			  </li>
+			</ul>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+
+	<div id="campaign-directory-wrapper">
+	  <h2 onclick="showOnly('campaign-directory')">Campaign Directory</h2>
+	  <div id="campaign-directory" class="section">
+		<div class="faq-list">
+			<p>A list of who's who in the campaign, from the leads to the QAs. If you need to reach someone, have a look here.</p>
+		  <div class="faq-item">
+			<p><strong>Campaign Manager:</strong> @Jake Rudulph</p>
+			<p><strong>Campaign Leads:</strong> @Rana Traboulsi, @Vica Katona</p>
+			<p><strong>Quality Leads:</strong> @Nabil, @Hallam Pope</p>
+		  </div>
+		  <div class="faq-item">
+			<p><strong>QAs:</strong></p>
+			<p>@Radu Buzei Mihai, @Joaquin Cano (Joaco), @Jonathon Lawinger, @Weybrandt Aucamp, @Mark Segismundo, @Victoria Cantwell, @Mehrab, @Lorenzo Pacheco, @Michael Wells, @Mo Ben, @Joanne Hewer, @Simphiwe Zungu, @cameron.burson, @Sowmya Ramineni, @Amos Hunt, @Crista Mclaren, @Visalat Bashir, @Keagan van Rooyen</p>
+		  </div>
+		  <div class="faq-item">
+			<p><strong>QAs in training:</strong></p>
+			<p>@Fiorella Montesinos Montalvo, @Senajid Topalović, @Syed Ali, @Madni</p>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+	<div id="expected-aht-wrapper">
+	  <h2 onclick="showOnly('expected-aht')">Expected AHT</h2>
+	  <div id="expected-aht" class="section">
+		<div class="faq-list">
+
+		  <div class="faq-item">
+			<p><strong>Expected AHT:</strong> 40–60 minutes</p>
+			<p><em>Extension above 50 minutes should only be used to ensure task alignment!</em></p>
+		  </div>
+
+		  <div class="faq-item" style="max-width: 600px;">
+			<table style="width: 100%; border-collapse: collapse; margin-top: 0.5rem;">
+			  <thead>
+				<tr style="background-color: rgba(255, 255, 255, 0.1); text-align: left;">
+				  <th style="padding: 0.5rem; border-bottom: 1px solid #444;">Full Time Allocation (FTA)</th>
+				  <th style="padding: 0.5rem; border-bottom: 1px solid #444;">Minimum</th>
+				  <th style="padding: 0.5rem; border-bottom: 1px solid #444;">Ideal</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				<tr>
+				  <td style="padding: 0.5rem;">1 FTA / 40 Hours</td>
+				  <td style="padding: 0.5rem;">35 tasks a week</td>
+				  <td style="padding: 0.5rem;">45 tasks a week</td>
+				</tr>
+				<tr>
+				  <td style="padding: 0.5rem;">0.75 FTA / 30 Hours</td>
+				  <td style="padding: 0.5rem;">26 tasks a week</td>
+				  <td style="padding: 0.5rem;">34 tasks a week</td>
+				</tr>
+				<tr>
+				  <td style="padding: 0.5rem;">0.5 FTA / 20 Hours</td>
+				  <td style="padding: 0.5rem;">18 tasks a week</td>
+				  <td style="padding: 0.5rem;">24 tasks a week</td>
+				</tr>
+				<tr>
+				  <td style="padding: 0.5rem;">0.25 FTA / 10 Hours</td>
+				  <td style="padding: 0.5rem;">9 tasks a week</td>
+				  <td style="padding: 0.5rem;">11 tasks a week</td>
+				</tr>
+			  </tbody>
+			</table>
+		  </div>
+
+		</div>
+	  </div>
+	</div>
+	
+	<div id="aht-target-wrapper">
+	  <h2 onclick="showOnly('aht-target')">AHT Target</h2>
+	  <div id="aht-target" class="section">
+		<div class="faq-list">
+
+		  <div class="faq-item">
+			<p><strong>AHT Target:</strong> 4–5 hours per Caterpillar</p>
+			<p><em>1 Caterpillar task is [4 steps] and the [final comparison].</em></p>
+		  </div>
+
+		  <div class="faq-item" style="max-width: 600px;">
+			<table style="width: 100%; border-collapse: collapse; margin-top: 0.5rem;">
+			  <thead>
+				<tr style="background-color: rgba(255, 255, 255, 0.1); text-align: left;">
+				  <th style="padding: 0.5rem; border-bottom: 1px solid #444;">Full Time Allocation (FTA)</th>
+				  <th style="padding: 0.5rem; border-bottom: 1px solid #444;">Minimum</th>
+				  <th style="padding: 0.5rem; border-bottom: 1px solid #444;">Ideal</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				<tr>
+				  <td style="padding: 0.5rem;">1 FTA / 40 Hours</td>
+				  <td style="padding: 0.5rem;">8 Caterpillars</td>
+				  <td style="padding: 0.5rem;">10 Caterpillars</td>
+				</tr>
+				<tr>
+				  <td style="padding: 0.5rem;">0.75 FTA / 30 Hours</td>
+				  <td style="padding: 0.5rem;">5 Caterpillars</td>
+				  <td style="padding: 0.5rem;">6 Caterpillars</td>
+				</tr>
+				<tr>
+				  <td style="padding: 0.5rem;">0.5 FTA / 20 Hours</td>
+				  <td style="padding: 0.5rem;">3 Caterpillars</td>
+				  <td style="padding: 0.5rem;">4 Caterpillars</td>
+				</tr>
+				<tr>
+				  <td style="padding: 0.5rem;">0.25 FTA / 10 Hours</td>
+				  <td style="padding: 0.5rem;">1 Caterpillar</td>
+				  <td style="padding: 0.5rem;">2 Caterpillars</td>
+				</tr>
+			  </tbody>
+			</table>
+		  </div>
+
+		</div>
+	  </div>
+	</div>
+
+
+	<div id="track-time-wrapper">
+	  <h2 onclick="showOnly('track-time')">How to Track Time</h2>
+	  <div id="track-time" class="section">
+		<div class="faq-list">
+		  <div class="faq-item">
+			<p><strong>Time Tracking Categories:</strong></p>
+			<ul>
+			  <li><span>New to the campaign? </span><span style="color: crimson;">Practice | Interactive Webpage (Invisible)</span></li>
+			  <li><span>Moved to production on Classic and operating/revising? </span><span style="color: crimson;">Trainer | Interactive Webpage (Invisible)</span></li>
+			  <li><span>Moved to production on Multi-Turn and operating/revising? </span><span style="color: crimson;">Trainer | Multi-turn interactive webpage generation (Invisible)</span></li>
+			  <li><span>Attending our campaign syncs (or watching at a later time)? </span><span style="color: crimson;">Vendor | Learning & Development</span></li>
+			  <li><span>Attending a meeting with OAI (or watching at a later time)? </span><span style="color: crimson;">OpenAI | Learning & Development</span></li>
+			</ul>
+		  </div>
+		</div>
+	  </div>
+	</div>
+
+  <div id="handle-blockers-wrapper">
+    <h2 onclick="showOnly('handle-blockers')">How to Handle Blockers</h2>
+    <div id="handle-blockers" class="section">
+      <div class="faq-list">
+          <p><strong>If you hit a complete blocker:</strong> Let us know in the Slack channel immediately. While you wait for resolution, use the time wisely to deepen your understanding of the campaign.</p>
+        <div class="faq-item">
+          <p><strong>Here’s how to stay productive:</strong></p>
+          <ul>
+            <li>Double-check all of your assigned tasks</li>
+            <li>Review campaign instructions and reference materials thoroughly</li>
+            <li>Help answer any unanswered questions in the Slack channel</li>
+            <li>If everything above is complete, follow the <strong>Downtime Policy</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+	<div id="initial-prompt-guide-wrapper">
+	  <h2 onclick="showOnly('initial-prompt-guide')">Initial Prompt Guide</h2>
+	  <div id="initial-prompt-guide" class="section">
+		<div class="faq-list">
+		  
+		  <div class="faq-item">
+			<p>Your initial prompt should be a concise overview of the target website. It should not go into detail of what the site should look like—this should be left for follow-up turns. We are not aiming for a perfect implementation in the first turn.</p>
+			<ul>
+			  <li>Question 3 from the FAQ covers this topic as well.</li>
+			  <li>This thread from Rana has some more dos and don'ts</li>
+			  <li>Joanne provided a workshop that goes into more detail about how we should structure our first prompt.</li>
+			</ul>
+		  </div>
+
+		  <div class="faq-item">
+			<ul>
+			  <li>🚫 <strong>DO NOT</strong> end the conversation explicitly in MTIW. e.g., “thanks, that is all”, “bye”, “this convo is over”</li>
+			  <li>🚫 <strong>DO NOT</strong> use a prompt for greetings! Especially that first one!</li>
+			  <li>🚫 <strong>DO NOT</strong> waste any message or turn on prompts that do not tackle the job at hand.</li>
+			  <li>🚫 <strong>DO NOT</strong> submit empty prompts.</li>
+			  <li>🚫 <strong>DO NOT</strong> pack the first prompt with all the aspects needed to achieve the goal—build it up over turns.</li>
+			  <li>✅ <strong>Prompt should be intentional</strong></li>
+			  <li>✅ <strong>Actively aiming to achieve the webpage</strong></li>
+			  <li>✅ <strong>Naturally written with no coding verbiage</strong></li>
+			</ul>
+		  </div>
+
+		  <div class="faq-item">
+			<p>Please react with <strong>:purple-check:</strong> if you read this post, and send us a prompt you are proud of here <strong>:arrow_down_small:</strong></p>
+		  </div>
+
+		  <div class="faq-item">
+			<p><em>The instructions call for a “concise overview” of the target webpage. While the exact length of the initial prompt will vary with the complexity of the webpage, we can use the average length of a classic IW prompt to consider 1–2 paragraphs as ideal to capture the core functionality of most pages.</em></p>
+		  </div>
+
+		</div>
+	  </div>
+	</div>
+
+  
+	<div id="flagging-tasks-wrapper">
+	  <h2 onclick="showOnly('flagging-tasks')">Flagging Tasks</h2>
+	  <div id="flagging-tasks" class="section">
+		<div class="faq-list">
+		  <p>If you encounter a task that is messed up in some way (e.g. if a webpage doesn't open, no code at all, loading issues), here are the steps:</p>
+		  <div class="faq-item">
+			<ol style="margin-top: 0.5rem; padding-left: 1.5rem;">
+			  <li style="margin-bottom: 0.5rem;">
+				Sometimes, the issue may only be on your end. Go through the steps in the <strong>“blockers”</strong> section above and see if that solves your issue.
+			  </li>
+			  <li style="margin-bottom: 0.5rem;">
+				If that doesn't work, post the link in the channel and someone else can verify if they are facing the same issue as you.
+			  </li>
+			  <li>
+				If it is confirmed to be an error, the leads/QAs will inform you on the next steps.
+			  </li>
+			</ol>
+		  </div>
+
+		</div>
+	  </div>
+	</div>
+  
+  <div id="downtime-policy-wrapper">
+  <h2 onclick="showOnly('downtime-policy')">Downtime Policy</h2>
+  <div id="downtime-policy" class="section">
+    <div class="faq-list">
+      <div class="faq-item">
+        <p>There have been many questions lately as certain projects see intermittent pauses or gaps in task availability, and I wanted to confirm with you all that we currently <strong>do not have a downtime policy in effect with OpenAI</strong>.</p>
+        <p>This means that if you are assigned to a given project/campaign and there are no tasks to do, please <strong>escalate to your lead and OM</strong> and wait until there are available tasks again to resume work (and time tracking). <strong>Idle time is not paid time.</strong></p>
+      </div>
+      <div class="faq-item">
+        <p>I know this is a change from how we previously operated, but due to:</p>
+        <ul>
+          <li>Increased platform stability on Feather</li>
+          <li>The client's desire to measure ROI more closely</li>
+        </ul>
+        <p>We can no longer cover paid downtime or guarantee a specific volume of work.</p>
+        <p><em>*Exceptions may apply for things like platform-wide outages lasting over 24 hours.</em></p>
+      </div>
+      <div class="faq-item">
+        <p>Rest assured: If the client does have alternative work for you while awaiting a new batch or campaign, we’ll find that opportunity and relay it to you!</p>
+      </div>
+	  <div class="faq-item">
+        <p><strong>If you encounter a complete blocker and cannot operate:</strong> Let us know in the channel. Meanwhile, focus on learning the campaign inside and out:</p>
+        <ul>
+          <li>Ensure you reviewed all your tasks</li>
+          <li>Thoroughly review instructions and other resources</li>
+          <li>Help answer unanswered Slack questions</li>
+          <li>If all above is complete, follow the Downtime Policy</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+    const sectionIds = [
+      'flag-tasks',
+      'slack-questions',
+      'campaign-directory',
+      'track-time',
+      'handle-blockers',
+	  'downtime-policy',
+	  'expected-aht',
+	  'flagging-tasks',
+	  'initial-prompt-guide',
+	  'aht-target'
+    ];
+
+    function showOnly(id) {
+      sectionIds.forEach(sectionId => {
+        const wrapper = document.getElementById(`${sectionId}-wrapper`);
+        if (sectionId === id) {
+          wrapper.classList.remove('hidden');
+          document.getElementById(sectionId).classList.add('visible');
+        } else {
+          wrapper.classList.add('hidden');
+          document.getElementById(sectionId).classList.remove('visible');
+        }
+      });
+      history.replaceState(null, '', `#${id}`);
+    }
+
+	function initGuidePage() {
+	  const hash = window.location.hash.slice(1);
+
+	  // Show all initially so layout doesn't flash
+	  sectionIds.forEach(id => {
+		document.getElementById(`${id}-wrapper`).classList.remove('hidden');
+		document.getElementById(id).classList.add('visible');
+	  });
+
+	  // Immediately apply section targeting
+	  if (sectionIds.includes(hash)) {
+		showOnly(hash);
+	  }
+	}
+
+	initGuidePage();
+	
+	window.addEventListener('hashchange', () => {
+	  const hash = window.location.hash.slice(1);
+	  if (sectionIds.includes(hash)) {
+		showOnly(hash);
+	  }
+	});
+	
+  </script>
+</body>
+</html>

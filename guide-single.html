@@ -1,0 +1,1995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Single Turn - Interactive Webpages</title>
+	<link rel="icon" type="image/x-icon" href="faviconIW.png">
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #222;
+            --accent-color: #ff7e00;
+            --text-color: #f5f5f5;
+            --light-gray: rgba(40, 40, 40, 0.9);
+            --medium-gray: #444;
+            --font-primary: 'Inter', sans-serif;
+            --font-heading: 'Playfair Display', serif;
+            --card-bg: rgba(25, 25, 25, 0.85);
+            --footer-bg: rgba(15, 15, 15, 0.9);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: transparent;
+            min-height: 100%;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+		.contact-form {
+		  display: flex;
+		  flex-direction: column;
+		  gap: 1.5rem;
+		  padding: 1rem 0;
+		  font-size: 1rem;
+		}
+
+		.form-group {
+		  display: flex;
+		  flex-direction: column;
+		}
+
+		.form-group label {
+		  color: var(--accent-color);
+		  font-weight: 600;
+		  margin-bottom: 0.5rem;
+		}
+
+		.form-group input,
+		.form-group textarea {
+		  padding: 0.75rem 1rem;
+		  background-color: rgba(255, 255, 255, 0.05);
+		  border: 1px solid rgba(255, 255, 255, 0.15);
+		  border-radius: 6px;
+		  color: white;
+		  font-family: var(--font-primary);
+		}
+
+		.form-group input::placeholder,
+		.form-group textarea::placeholder {
+		  color: rgba(255, 255, 255, 0.4);
+		}
+
+		.form-group input:focus,
+		.form-group textarea:focus {
+		  border-color: var(--accent-color);
+		  outline: none;
+		  background-color: rgba(255, 255, 255, 0.08);
+		}
+        
+        /* Parallax Background */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('00025-3174985494.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+        
+        .parallax-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.80) 0%, rgba(20,20,30,0.65) 100%);
+            z-index: -1;
+        }
+        
+        /* Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            letter-spacing: -0.02em;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            letter-spacing: -0.01em;
+        }
+        
+        h3 {
+            font-size: 2rem;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Layout */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .col {
+            flex: 1;
+            padding: 1rem;
+        }
+        
+        /* Header */
+        header {
+            padding: 1.5rem 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: transparent;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--accent-color);
+        }
+        
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 2rem;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        nav ul li.active a {
+            color: var(--accent-color);
+        }
+        
+        nav ul li.active a::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 30vh;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+            padding-top: 60px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.4) 100%);
+            z-index: 0;
+        }
+        
+        .subtitle {
+            font-family: var(--font-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-primary);
+            min-width: 225px;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e57200;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 126, 0, 0.4);
+        }
+        
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            min-width: auto;
+        }
+        
+        .btn-sm svg {
+            margin-right: 0.5rem;
+            vertical-align: text-bottom;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: #ddd;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn-outline:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: white;
+        }
+		
+		.external-resource-message {
+		  position: absolute;
+		  top: 0;
+		  left: 0;
+		  right: 0;
+		  bottom: 0;
+		  display: flex;
+		  flex-direction: column;
+		  align-items: center;
+		  justify-content: center;
+		  background-color: var(--card-bg);
+		  color: white;
+		  padding: 2rem;
+		  text-align: center;
+		}
+
+		.external-resource-message h3 {
+		  margin-bottom: 1rem;
+		  color: var(--accent-color);
+		}
+
+		.external-resource-message .btn {
+		  margin-top: 1.5rem;
+		}
+        
+        /* Sections with Background */
+        .section {
+            padding: 6rem 0;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+        
+        .section-bg {
+            background-color: var(--light-gray);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3rem;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--card-bg);
+            height: 100%;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        
+        .card-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .card-content {
+            padding: 2rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+		
+		.faq-list {
+			padding: 1rem;
+			display: flex;
+			flex-direction: column;
+			gap: 1.5rem;
+			font-size: 1rem;
+			line-height: 1.6;
+			color: white;
+		}
+
+		.faq-item {
+			background-color: rgba(255, 255, 255, 0.03);
+			border-left: 4px solid var(--accent-color);
+			padding: 1rem 1.5rem;
+			border-radius: 8px;
+			box-shadow: 0 0 10px rgba(255, 126, 0, 0.05);
+			transition: background-color 0.3s ease;
+		}
+
+		.faq-item:hover {
+			background-color: rgba(255, 126, 0, 0.05);
+		}
+        
+        /* Footer */
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 5rem 0 2rem;
+            position: relative;
+        }
+        
+        .footer-top {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+            display: block;
+			text-decoration: none;
+        }
+        
+        .footer-logo span {
+            color: var(--accent-color);
+        }
+        
+        .footer-nav h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+        
+        .footer-nav ul {
+            list-style: none;
+        }
+        
+        .footer-nav ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-nav ul li a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-nav ul li a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Glow Effects */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 126, 0, 0.5);
+        }
+        
+        /* Loading Animation */
+        .loading-animation {
+            display: inline-block;
+            position: relative;
+            width: 20px;
+            height: 20px;
+            margin-left: 10px;
+        }
+        
+        .loading-animation:after {
+            content: " ";
+            display: block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            border-color: #fff transparent #fff transparent;
+            animation: loading-animation 1.2s linear infinite;
+        }
+        
+        @keyframes loading-animation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        /* Hidden Loading Animation */
+        .loading-animation {
+            display: none;
+        }
+        
+        .btn.loading .loading-animation {
+            display: inline-block;
+        }
+        
+        /* Button Loading State */
+        .btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        
+        /* Resource Viewer Modal */
+        .resource-viewer-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .resource-viewer-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .resource-viewer-content {
+            background-color: var(--card-bg);
+            width: 95%;
+            height: 90%;
+            max-width: 2000px;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .resource-viewer-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        
+        .resource-viewer-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: white;
+        }
+        
+        .resource-viewer-close {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .resource-viewer-close:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .resource-viewer-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        
+        /* Sidebar */
+        .resource-sidebar {
+            width: 280px;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .resource-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            overflow-y: auto;
+            flex: 1;
+        }
+        
+        .resource-list li {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .resource-list li a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        
+        .resource-list li a:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        .resource-list li.active a {
+            background-color: rgba(255, 126, 0, 0.2);
+            color: var(--accent-color);
+            border-left: 3px solid var(--accent-color);
+            padding-left: calc(1rem - 3px);
+        }
+        
+        .resource-actions {
+            padding: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        /* Content Area */
+        .resource-content {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+            background-color: #fff; /* Light background for iframe content */
+        }
+        
+        .resource-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Loading State */
+        .resource-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(25, 25, 25, 0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .resource-loading.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        
+        .resource-spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 1rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Popup Notice */
+        .resource-notice {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--accent-color);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            z-index: 9999;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: slide-up 0.3s ease;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        
+        .resource-notice.fade-out {
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        @keyframes slide-up {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, 20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, 0);
+            }
+        }
+        
+        /* Body State when Modal is Open */
+        body.resource-viewer-open {
+            overflow: hidden;
+        }
+        
+        /* Media Queries */
+        @media (max-width: 1024px) {
+            h1 {
+                font-size: 3.5rem;
+            }
+            
+            h2 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+            
+            h2 {
+                font-size: 2rem;
+            }
+            
+            .hero {
+                height: 70vh;
+            }
+            
+            /* Add responsive menu for mobile */
+            header {
+                background-color: rgba(0,0,0,0.8);
+                padding: 1rem 0;
+            }
+            
+            .resource-viewer-container {
+                flex-direction: column;
+            }
+                
+            .resource-sidebar {
+                width: 100%;
+                height: 200px;
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+                
+            .resource-list {
+                display: flex;
+                flex-wrap: wrap;
+                overflow-y: auto;
+            }
+                
+            .resource-list li {
+                width: 50%;
+                border-bottom: none;
+                border-right: 1px solid rgba(255, 255, 255, 0.05);
+            }
+                
+            .resource-actions {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+                
+            .resource-actions .btn {
+                flex: 1;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .header-container {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 1rem;
+            }
+            
+            nav ul li {
+                margin-left: 0.75rem;
+                margin-right: 0.75rem;
+            }
+            
+            /* Fixed header for very small screens */
+            header {
+                position: relative;
+                background-color: var(--primary-color);
+                padding: 1rem 0;
+            }
+            
+            .hero-content {
+                padding-top: 0;
+            }
+            
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+	<script>
+	// Check authentication immediately as the page loads
+	// This script runs before the body is rendered
+	(function() {
+		if (localStorage.getItem('authenticated') === 'true') {
+			// Create a style tag to hide the login overlay
+			document.write('<style>#login-overlay{display:none !important;}</style>');
+		}
+	})();
+	</script>
+	<div id="login-overlay" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 10000; display: flex; justify-content: center; align-items: center;">
+		<div class="login-form" style="background-color: var(--card-bg); border-radius: 12px; padding: 2.5rem; width: 90%; max-width: 400px; box-shadow: 0 15px 40px rgba(0,0,0,0.5);">
+			<h2 style="text-align: center; margin-bottom: 1.5rem; color: white;">Interactive Webpages</h2>
+			<div style="border-bottom: 3px solid var(--accent-color); width: 50px; margin: 0 auto 2rem;"></div>
+			
+			<div style="margin-bottom: 1.5rem;">
+				<label for="username" style="display: block; margin-bottom: 0.5rem; color: #ddd; font-weight: 500;">Username</label>
+				<input type="text" id="username" placeholder="Enter username" style="width: 100%; padding: 0.8rem; border-radius: 6px; border: 1px solid var(--medium-gray); background-color: var(--light-gray); color: white;">
+			</div>
+			
+			<div style="margin-bottom: 2rem;">
+				<label for="password" style="display: block; margin-bottom: 0.5rem; color: #ddd; font-weight: 500;">Password</label>
+				<input type="password" id="password" placeholder="Enter password" style="width: 100%; padding: 0.8rem; border-radius: 6px; border: 1px solid var(--medium-gray); background-color: var(--light-gray); color: white;">
+			</div>
+			
+			<button id="login-btn" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-weight: 600;">
+				<span id="login-text">Log In</span>
+				<span id="login-spinner" style="display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s linear infinite; margin-left: 8px; vertical-align: middle;"></span>
+			</button>
+			
+			<p id="login-error" style="color: #ff5252; margin-top: 1rem; text-align: center; display: none; font-size: 0.9rem;">Invalid username or password</p>
+		</div>
+	</div>
+
+	<script>
+	// Add keyframe animation for spinner and shake effect
+	document.head.insertAdjacentHTML('beforeend', `
+		<style>
+			@keyframes spin {
+				to { transform: rotate(360deg); }
+			}
+			@keyframes shake {
+				0%, 100% { transform: translateX(0); }
+				10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+				20%, 40%, 60%, 80% { transform: translateX(5px); }
+			}
+			.shake {
+				animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both !important;
+			}
+		</style>
+	`);
+
+	// Login functionality with basic obfuscation
+	document.addEventListener('DOMContentLoaded', function() {
+		// Simple check to see if user is already authenticated
+		if (localStorage.getItem('IWauthenticatedIW') === 'true') {
+			document.getElementById('login-overlay').style.display = 'none';
+			return;
+		}
+		
+		// Login form elements
+		const loginBtn = document.getElementById('login-btn');
+		const loginForm = document.querySelector('.login-form');
+		const usernameInput = document.getElementById('username');
+		const passwordInput = document.getElementById('password');
+		const loginError = document.getElementById('login-error');
+		const loginText = document.getElementById('login-text');
+		const loginSpinner = document.getElementById('login-spinner');
+		
+		// Obfuscated credentials
+		const validUsername = atob("dHJhaW5lcg=="); // Base64 encoded "trainer"
+		
+		// Parts of the password split and reversed - basic obfuscation
+		const pwParts = [
+			"b72",       // Part 3 (reversed)
+			"yrrebwartS", // Part 2 (reversed)
+			"@spin"      // Part 1
+		];
+		
+		// Function to reconstruct the password
+		function getValidPassword() {
+			return pwParts[2] + pwParts[1].split('').reverse().join('') + pwParts[0].split('').reverse().join('');
+		}
+		
+		// Login button click handler
+		loginBtn.addEventListener('click', function() {
+			// Show loading state
+			loginText.textContent = "Verifying...";
+			loginSpinner.style.display = "inline-block";
+			loginBtn.disabled = true;
+			
+			// Get user inputs
+			const username = usernameInput.value.trim();
+			const password = passwordInput.value;
+			
+			// Simulate a slight delay for UX
+			setTimeout(function() {
+				// Check credentials against reconstructed values
+				if (username === validUsername && password === getValidPassword()) {
+					// Success - store authentication permanently
+					localStorage.setItem('IWauthenticatedIW', 'true');
+					
+					// Update UI to show success
+					loginText.textContent = "Success!";
+					
+					// Hide login overlay
+					setTimeout(function() {
+						document.getElementById('login-overlay').style.display = 'none';
+					}, 500);
+				} else {
+					// Failed login
+					loginError.textContent = "Invalid username or password";
+					loginError.style.display = 'block';
+					
+					// Shake animation for feedback
+					loginForm.classList.add('shake');
+					setTimeout(function() {
+						loginForm.classList.remove('shake');
+					}, 500);
+					
+					// Reset button state
+					loginText.textContent = "Log In";
+					loginSpinner.style.display = "none";
+					loginBtn.disabled = false;
+				}
+			}, 500);
+		});
+		
+		// Allow pressing Enter key to submit
+		[usernameInput, passwordInput].forEach(function(input) {
+			input.addEventListener('keydown', function(e) {
+				if (e.key === 'Enter' && !loginBtn.disabled) {
+					loginBtn.click();
+				}
+			});
+		});
+	});
+	</script>
+    <!-- Parallax Background -->
+    <div class="parallax-bg"></div>
+    <div class="parallax-overlay"></div>
+    
+    <div class="content-wrapper">
+        <!-- Header -->
+        <header>
+            <div class="container header-container">
+                <a href="guide-main.html" class="logo">Interactive<span> Webpages</span></a>
+                <nav>
+                    <ul>
+                        <li><a href="guide-main.html">Home</a></li>
+                        <li> <a href="guide-main.html#resources">Resources</a></li>
+                        <li><a href="#" onclick="openInfoModal('contact'); return false;">Contact Us</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <p class="subtitle">Interactive Webpages</p>
+                    <h1 class="glow-text">Classic Single Turn</h1>
+                    <p style="margin-bottom: 0;">"Truth is ever to be found in simplicity, and not in the multiplicity and confusion of things."</p>
+<p align="right" style="margin-top: 2px;">— Isaac Newton</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Featured Resources -->
+        <section class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title glow-text">Resource and Guide Collection</h2>
+                </div>
+                <div class="card-grid">
+                    <!-- Cards specific to each page -->
+                    
+                    <!-- Card 1 -->
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('singlequick.png');"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">Quick Access</h3>
+                            <p>Links to resources you really should be using on each and every task each and every day.</p>
+                            <center>
+                            <a href="#" class="btn btn-primary" id="accessBtn" onclick="openResourceLinks('access', 'Quick Access'); return false;">
+                                Load Resources
+                                <span class="loading-animation"></span>
+                            </a>
+                            </center>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 2 -->
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('singleguid.png');"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">Guidance and Scoring</h3>
+                            <p>Reference material to help you work through tasks from testing to follow-up prompting.</p>
+                            <center>
+                            <a href="#" class="btn btn-primary" id="guidanceBtn" onclick="openResourceLinks('guidance', 'Guidance and Scoring'); return false;">
+                                Load Resources
+                                <span class="loading-animation"></span>
+                            </a>
+                            </center>
+                        </div>
+                    </div>
+                    
+                    <!-- Card 3 -->
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('singletool.png');"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">Tools and Apps</h3>
+                            <p>Tools like the external resource checker and media replacer that help analyze webpages.</p>
+                            <center>
+                            <a href="#" class="btn btn-primary" id="toolsBtn" onclick="openResourceLinks('tools', 'Tools and Apps'); return false;">
+                                Load Resources
+                                <span class="loading-animation"></span>
+                            </a>
+                            </center>
+                        </div>
+                    </div>
+					
+                    <!-- Card 4 -->
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('singletrack.png');"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">Workflows and Forms</h3>
+                            <p>Forms and Workflows for feedback and requests as well as links to core systems.</p>
+                            <center>
+                            <a href="#" class="btn btn-primary" id="formsBtn" onclick="openResourceLinks('forms', 'Workflows and Forms'); return false;">
+                                Load Resources
+                                <span class="loading-animation"></span>
+                            </a>
+                            </center>
+                        </div>
+                    </div>
+					
+                    <!-- Card 5 -->
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('singlestand.png');"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">Expectations and Standards</h3>
+                            <p>Campaign instructions, the Source of Truth, your AHT, and all other bits and bobs.</p>
+                            <center>
+                            <a href="#" class="btn btn-primary" id="standardsBtn" onclick="openResourceLinks('standards', 'Expectations and Standards'); return false;">
+                                Load Resources
+                                <span class="loading-animation"></span>
+                            </a>
+                            </center>
+                        </div>
+                    </div>
+					
+                    <!-- Card 6 -->
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('singlecomm.png');"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">Communications</h3>
+                            <p>Workflows and all things Slack. Includes meetings as well as second review forms.</p>
+                            <center>
+                            <a href="#" class="btn btn-primary" id="communicationsBtn" onclick="openResourceLinks('communications', 'Communications'); return false;">
+                                Load Resources
+                                <span class="loading-animation"></span>
+                            </a>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-top">
+                    <div>
+                        <a href="guide-main.html" class="footer-logo">Interactive<span> Webpages</span></a>
+                        <p>We provide comprehensive resources to help you excel in your journey of creating and evaluating interactive web experiences.</p>
+                    </div>
+                    <div class="footer-nav">
+                        <h3>Resources</h3>
+                        <ul>
+                            <li><a href="guide-single.html"; return false;">Single-Turn</a></li>
+                            <li><a href="guide-extended.html"; return false;">Extended</a></li>
+                            <li><a href="guide-multi.html"; return false;">Multi-Turn</a></li>
+                        </ul>
+                    </div>
+					<div class="footer-nav">
+					  <h3>Site Map</h3>
+					  <ul>
+					    <li><a href="guide-main.html">Home</a></li>
+						<li><a href="#" onclick="openInfoModal('about'); return false;">About Us</a></li>
+						<li><a href="#" onclick="openInfoModal('contact'); return false;">Contact Us</a></li>
+					  </ul>
+					</div>
+					<div class="footer-nav">
+					  <h3>Support</h3>
+					  <ul>
+						<li><a href="#" onclick="openInfoModal('faq'); return false;">FAQs</a></li>
+						<li><a href="#" onclick="openInfoModal('help'); return false;">Help Center</a></li>
+						<li><a href="#" onclick="openInfoModal('contact'); return false;">Report Issues</a></li>
+					  </ul>
+					</div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Maximum Functionality of Five. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Modal Container (Create it in the DOM initially) -->
+    <div id="resourceViewerModal" class="resource-viewer-modal">
+        <!-- Content will be dynamically added here -->
+    </div>
+    
+    <!-- JavaScript for Opening Multiple Tabs -->
+    <script>
+        // Resource collections
+        const resourceLinks = {
+			access: [
+				{ 
+					url: "https://docs.google.com/document/d/1qv7SU3wTqvZ7QuFQ0q0H2-yVIQyAcsiSrXgqXKLsks0/edit?tab=t.0",
+					name: "Single Turn Rubric" 
+				},
+				{ 
+					url: "https://docs.google.com/forms/d/e/1FAIpQLSc0k997ryHdOGPeGMm1Wp2JPDpyesYevBqdmJagOJxWK_2lzg/viewform",
+					name: "Submission Form" 
+				},
+				{ 
+					url: "https://docs.google.com/document/d/1T2g-TpnaqWO0KefMMeROGsaPv-OcRClR-b3lWV_5KuY/edit?tab=t.0",
+					name: "Tie-Break Flowchart" 
+				},
+				{ 
+					url: "https://mjwells-inv.github.io/imageswap/swap.html",
+					name: "Media Replacer" 
+				},
+				{ 
+					url: "https://mjwells-inv.github.io/imageswap/imageguide.html",
+					name: "Image Placeholder Guide" 
+				},		
+				{ 
+					url: "https://mjwells-inv.github.io/imageswap/videoguide.html",
+					name: "Video Placeholder Guide" 
+				},					
+				{ 
+					url: "https://external-resource-checker.netlify.app/",
+					name: "External Resource Checker" 
+				},					
+				{ 
+					url: "https://docs.google.com/document/d/1b6LDxWGivVCQcGiWUsZfb8N8s3BiJVIUVC4Bl3znWBg/edit?tab=t.0#heading=h.7tcusyfrp6",
+					name: "Webpage Expectations" 
+				},
+				{ 
+					url: "https://chat.openai.com",
+					name: "ChatGPT",
+					isExternal: true
+				},	
+			],
+            guidance: [
+                { 
+                    url: "https://docs.google.com/document/d/1sDnj_idC20Iq2dtcED-JOy-P1kUS-vMgW0Ie7mgSCYQ/edit?tab=t.0",
+                    name: "Single-Turn Rubric" 
+                },
+                { 
+                    url: "https://docs.google.com/document/d/1T2g-TpnaqWO0KefMMeROGsaPv-OcRClR-b3lWV_5KuY/edit?tab=t.0",
+                    name: "Tie-Break Flowchart" 
+                },
+                { 
+                    url: "https://mjwells-inv.github.io/imageswap/imageguide.html",
+                    name: "Image Placeholder Guide" 
+                },    
+                { 
+                    url: "https://mjwells-inv.github.io/imageswap/videoguide.html",
+                    name: "Video Placeholder Guide" 
+                },
+                { 
+                    url: "https://docs.google.com/document/d/1b6LDxWGivVCQcGiWUsZfb8N8s3BiJVIUVC4Bl3znWBg/edit?tab=t.0#heading=h.7tcusyfrp6",
+                    name: "Webpage Expectations"
+                }, 
+                { 
+                    url: "https://docs.google.com/spreadsheets/d/1z5BypQNR8JRgpASAlnEWmsjCkPnsXdT9wXcojbRCIB8/edit?gid=878408659#gid=878408659",
+                    name: "Fixed Error Caps" 
+                },      
+                { 
+                    url: "https://docs.google.com/presentation/d/1gznU8DA3seDz3jAw6PtFuiv4_0NMdYAmJP9lqENzckQ/edit#slide=id.g3275ae88f1e_0_0",
+                    name: "Single-Turn vs. Extended" 
+                }, 
+                { 
+                    url: "https://docs.google.com/presentation/d/1ZPUFaKW6iQiVCfmIZtI18Xk93-pxzEMfmNONfZmJyeU/edit#slide=id.g327947337cd_0_20",
+                    name: "Unrequested vs. Flaws" 
+                },       
+                { 
+                    url: "https://docs.google.com/presentation/d/1oXFpcdclaBqunLOB8d9f6W_lT8UBVhb7qqEet-TFseM/edit#slide=id.g2dcf0d9a104_0_0",
+                    name: "Minimizing Errors" 
+                },
+                { 
+                    url: "https://docs.google.com/presentation/d/1nqQlVeajFptEQuRBWCiS6n6pbPGbkiyTvD8s5tGxXnE/edit#slide=id.p",
+                    name: "Web Dev Basics" 
+                },   
+                { 
+                    url: "https://docs.google.com/presentation/d/1y4ancZ5uvjcrYwySXdoomygwvDJDj07GFEgZvNlulRM/edit#slide=id.p",
+                    name: "ID External Resources" 
+                },     
+                { 
+                    url: "https://kvanrooyen-inv.github.io/what-the-placeholder/",
+                    name: "ID Placeholders" 
+                },     
+                { 
+                    url: "https://docs.google.com/document/d/1wbgAXwlIbFO37v4POX3Y4Rbdu_jrOqKDC9DtUlEilII/edit?tab=t.0",
+                    name: "Viewing Source Code" 
+                },
+                { 
+                    url: "https://docs.google.com/document/d/1WIDSgPf9mbW44SkGrlrULtBYR3EOCtYwih07BtiRT2M/edit?tab=t.0",
+                    name: "Golden Tasks" 
+                },    
+    
+            ],
+            tools: [
+                { 
+                    url: "https://docs.google.com/forms/d/e/1FAIpQLSc0k997ryHdOGPeGMm1Wp2JPDpyesYevBqdmJagOJxWK_2lzg/viewform",
+                    name: "Submission Form" 
+                },
+                { 
+                    url: "https://docs.google.com/spreadsheets/d/1dPGTOQ9g2X68xYs1CRR3il2TjYo3OkOku_bcjG40tyY/edit?gid=0#gid=0",
+                    name: "Tracker",
+					isExternal: true
+                },
+                { 
+                    url: "https://feather.openai.com/campaigns/609b4df9-01b3-452a-b964-32fb5f42db58?tab=tasks&tasks-tab=unclaimed",
+                    name: "Feather",
+					isExternal: true
+                },    
+                { 
+                    url: "https://slack.com/archives/C07GP8UJG06",
+                    name: "Slack Channel",
+					isExternal: true
+                },
+                { 
+                    url: "https://mjwells-inv.github.io/imageswap/swap.html",
+                    name: "Media Replacer" 
+                },     
+                { 
+                    url: "https://external-resource-checker.netlify.app/",
+                    name: "Resource Checker" 
+                },   
+                { 
+                    url: "https://docs.google.com/document/d/1vrLjZxSLkThjlzNnRMznAXqj9fq1HG7i6OF-B3DJXwM/edit?tab=t.bnzu5zaenfxk",
+                    name: "Jargon Glossary" 
+                },         
+                { 
+					url: "https://chat.openai.com",
+					name: "ChatGPT",
+					isExternal: true
+                },       
+            ],
+            forms: [
+                { 
+                    url: "https://docs.google.com/forms/d/e/1FAIpQLSc0k997ryHdOGPeGMm1Wp2JPDpyesYevBqdmJagOJxWK_2lzg/viewform",
+                    name: "Submission Form" 
+                },
+                { 
+                    url: "https://docs.google.com/spreadsheets/d/1dPGTOQ9g2X68xYs1CRR3il2TjYo3OkOku_bcjG40tyY/edit?gid=0#gid=0",
+                    name: "Tracker",
+					isExternal: true
+                },
+                { 
+                    url: "https://feather.openai.com/campaigns/609b4df9-01b3-452a-b964-32fb5f42db58?tab=tasks&tasks-tab=unclaimed",
+                    name: "Feather",
+					isExternal: true
+                },    
+                { 
+                    url: "https://slack.com/archives/C07GP8UJG06",
+                    name: "Slack Channel",
+					isExternal: true
+                },
+                { 
+                    url: "https://airtable.com/appyncASa4fLSoeT3/pagQMUOIlvdRGLlf5/form",
+                    name: "2nd Review Form",
+					isExternal: true,
+                },    
+                { 
+                    url: "https://invisible.enterprise.slack.com/docs/THSN86QS1/F08LZR5CT6F?focus_section_id=temp:C:CTA3da0b847908b449998361c212",
+                    name: "Add to Jargon Form",
+					isExternal: true
+                },      
+            ],
+			standards: [
+                { 
+                    url: "https://docs.google.com/spreadsheets/d/1tvSjc2p0ZVRuxr-JE-1agtVdStdqVuQeLUs6nlnC4FM/edit?gid=1199773690#gid=1199773690",
+                    name: "Source of Truth" 
+                },
+                { 
+                    url: "https://feather.openai.com/campaigns/609b4df9-01b3-452a-b964-32fb5f42db58?tab=instructions",
+                    name: "Campaign Instructions",
+					isExternal: true
+                },    
+                { 
+                    url: "https://docs.google.com/document/d/1b6LDxWGivVCQcGiWUsZfb8N8s3BiJVIUVC4Bl3znWBg/edit?tab=t.0#heading=h.7tcusyfrp6",
+                    name: "Webpage Expectations" 
+                },
+                { 
+                    url: "slack-data.html#track-time",
+                    name: "Hubstaff Tracking" 
+                },   
+                { 
+                    url: "slack-data.html#expected-aht",
+                    name: "AHT Targets" 
+                }, 
+                { 
+                    url: "https://docs.google.com/presentation/d/1crqkojy0lvVjewe6zMrmjglJeqt1bs2zKlwcb9va-0A/edit#slide=id.g314bd3abe13_2_76",
+                    name: "Improving AHT" 
+                },      
+                { 
+                    url: "slack-data.html#handle-blockers",
+                    name: "Handling Blockers",
+					isLocal: true
+                },       
+                { 
+                    url: "slack-data.html#downtime-policy",
+                    name: "Downtime Policy" 
+                },           
+			],
+			communications: [
+                { 
+                    url: "slack-data.html#campaign-directory",
+                    name: "Campaign Directory" 
+                },
+                { 
+                    url: "https://invisible.enterprise.slack.com/docs/THSN86QS1/F08LZR5CT6F?focus_section_id=temp:C:CTA4afe2a8921ac493ca78bc28cc",
+                    name: "Meeting Recordings",
+					isExternal: true
+                },    
+                { 
+                    url: "https://slack.com/archives/C07GP8UJG06",
+                    name: "Slack Channel",
+					isExternal: true
+                },
+                { 
+                    url: "slack-data.html#slack-questions",
+                    name: "Asking Questions" 
+                },
+                { 
+                    url: "slack-data.html#flag-tasks",
+                    name: "Flagging Tasks" 
+                },           
+			],
+        };
+
+        // Function to show the resource viewer modal
+        function openResourceLinks(resourceType, cardTitle) {
+            // Show loading animation on the clicked button
+            const buttonId = getButtonId(resourceType);
+            if (buttonId) {
+                document.getElementById(buttonId).classList.add('loading');
+            }
+            
+            // Check if resource type exists
+            if (!resourceLinks[resourceType]) {
+                console.error('Resource type not found:', resourceType);
+                if (buttonId) document.getElementById(buttonId).classList.remove('loading');
+                return false;
+            }
+            
+            // Get the links for this resource type
+            const links = resourceLinks[resourceType];
+            
+            // Get the modal container
+            const modal = document.getElementById('resourceViewerModal');
+            
+            // Create the content for the modal
+            let modalContent = `
+                <div class="resource-viewer-content">
+                    <div class="resource-viewer-header">
+                        <h3>Resources for ${cardTitle || resourceType.charAt(0).toUpperCase() + resourceType.slice(1)}</h3>
+                        <button class="resource-viewer-close" onclick="closeResourceViewer()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="resource-viewer-container">
+                        <div class="resource-sidebar">
+                            <ul class="resource-list">
+            `;
+            
+            // Add each link to the sidebar
+            links.forEach((resource, index) => {
+                modalContent += `
+                    <li class="${index === 0 ? 'active' : ''}" data-resource-index="${index}">
+                        <a href="#" onclick="switchResource(event, '${resourceType}', ${index})">
+                            ${resource.name}
+                        </a>
+                    </li>
+                `;
+            });
+            
+            // Add buttons for opening all in new tabs
+            modalContent += `
+                            </ul>
+                            <div class="resource-actions">
+                                <button class="btn btn-outline btn-sm" onclick="openCurrentResourceInNewTab()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-open">
+                                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                        <polyline points="15 3 21 3 21 9"></polyline>
+                                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                                    </svg>
+                                    Open in New Tab
+                                </button>
+                                <button class="btn btn-primary btn-sm" onclick="openAllResourcesInNewTabs('${resourceType}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon-tabs">
+                                        <path d="M18 3H6a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3z"></path>
+                                        <line x1="3" y1="9" x2="21" y2="9"></line>
+                                    </svg>
+                                    Open All in Tabs
+                                </button>
+                            </div>
+                        </div>
+                        <div class="resource-content">
+                            <div class="resource-loading">
+                                <div class="resource-spinner"></div>
+                                <p>Loading resource...</p>
+                            </div>
+                            <iframe id="resourceFrame" src="${links[0].url}" frameborder="0" onload="hideResourceLoading()"></iframe>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Set the modal content
+            modal.innerHTML = modalContent;
+            
+            // Store current resource information in the modal element
+            modal.dataset.currentResourceType = resourceType;
+            modal.dataset.currentResourceIndex = 0;
+            
+            // Show modal with animation
+            modal.classList.add('show');
+            document.body.classList.add('resource-viewer-open');
+            
+            // Remove loading state from button
+            if (buttonId) {
+                document.getElementById(buttonId).classList.remove('loading');
+            }
+            
+            return false;
+        }
+
+        // Function to hide resource loading spinner
+        function hideResourceLoading() {
+            const loadingElement = document.querySelector('.resource-loading');
+            if (loadingElement) {
+                loadingElement.classList.add('hidden');
+            }
+        }
+
+        // Function to show resource loading spinner
+        function showResourceLoading() {
+            const loadingElement = document.querySelector('.resource-loading');
+            if (loadingElement) {
+                loadingElement.classList.remove('hidden');
+            }
+        }
+
+        // Function to switch to a different resource
+        function switchResource(event, resourceType, index) {
+            event.preventDefault();
+            
+            // Show loading spinner
+            showResourceLoading();
+            
+            // Get resource links
+            const links = resourceLinks[resourceType] || [];
+            if (!links[index]) {
+                console.error('Resource not found:', resourceType, index);
+                return false;
+            }
+            
+            // Update active class on sidebar
+            const sidebarItems = document.querySelectorAll('.resource-list li');
+            sidebarItems.forEach(item => item.classList.remove('active'));
+            document.querySelector(`.resource-list li[data-resource-index="${index}"]`).classList.add('active');
+			
+			// Check if this is an external link that should open in a new tab
+			// For ChatGPT specifically, or you could add an isExternal property to your links
+			if (links[index].url.includes('chatgpt.com') || links[index].isExternal === true) {
+				// Special handling for Slack shortcut
+				if (links[index].url.includes('slack.com/shortcuts/')) {
+					tryOpenSlackWithFallback(links[index].url);
+				} else {
+					window.open(links[index].url, '_blank');
+				}
+
+				// Hide iframe
+				const iframe = document.getElementById('resourceFrame');
+				iframe.style.display = 'none';
+
+				// Remove any existing message
+				const existingMessage = document.querySelector('.external-resource-message');
+				if (existingMessage) existingMessage.remove();
+
+				// Create and insert message
+				const externalMessage = document.createElement('div');
+				externalMessage.className = 'external-resource-message';
+				externalMessage.innerHTML = `
+					<h3>${links[index].name} opened in a new tab</h3>
+					<p>This resource has been opened in a new browser tab for better compatibility.</p>
+				`;
+				iframe.parentNode.appendChild(externalMessage);
+				hideResourceLoading();
+            } else {
+				// Regular internal resources still use the iframe
+				const iframe = document.getElementById('resourceFrame');
+				iframe.style.display = 'block';
+				iframe.src = links[index].url;
+				
+				// Remove any external message if it exists
+				const existingMessage = document.querySelector('.external-resource-message');
+				if (existingMessage) existingMessage.remove();
+			}
+            
+            // Update current resource information
+            const modal = document.getElementById('resourceViewerModal');
+            modal.dataset.currentResourceType = resourceType;
+            modal.dataset.currentResourceIndex = index;
+            
+            return false;
+        }
+
+		function tryOpenSlackWithFallback(webUrl) {
+			const slackAppUrl = "slack://open";
+			const iframe = document.createElement("iframe");
+			iframe.style.display = "none";
+			iframe.src = slackAppUrl;
+			document.body.appendChild(iframe);
+
+			setTimeout(() => {
+				window.open(webUrl, "_blank");
+				document.body.removeChild(iframe);
+			}, 1000);
+		}	
+
+        // Function to close the resource viewer
+        function closeResourceViewer() {
+            const modal = document.getElementById('resourceViewerModal');
+            if (modal) {
+                modal.classList.remove('show');
+                document.body.classList.remove('resource-viewer-open');
+            }
+        }
+
+        // Function to open current resource in new tab
+        function openCurrentResourceInNewTab() {
+            const modal = document.getElementById('resourceViewerModal');
+            if (!modal) return;
+            
+            const resourceType = modal.dataset.currentResourceType;
+            const resourceIndex = parseInt(modal.dataset.currentResourceIndex);
+            
+            // Get resource links
+            const links = resourceLinks[resourceType] || [];
+            if (!links[resourceIndex]) return;
+            
+            // Open in new tab
+            window.open(links[resourceIndex].url, '_blank');
+        }
+
+        // Function to open all resources in new tabs
+        function openAllResourcesInNewTabs(resourceType) {
+            // Show notification
+            const links = resourceLinks[resourceType] || [];
+            
+            // Notify user about popup blocker
+            const notice = document.createElement('div');
+            notice.className = 'resource-notice';
+            notice.innerHTML = `
+                <div class="resource-notice-content">
+                    <p>Opening ${links.length} resources in new tabs. Please check your popup blocker settings if they don't appear.</p>
+                </div>
+            `;
+            document.body.appendChild(notice);
+            
+            // Open each link in a new tab
+            links.forEach(resource => {
+                window.open(resource.url, '_blank');
+            });
+            
+            // Remove notice after a few seconds
+            setTimeout(() => {
+                notice.classList.add('fade-out');
+                setTimeout(() => {
+                    notice.remove();
+                }, 500);
+            }, 5000);
+        }
+
+        // Helper function to get button ID from resource type
+        function getButtonId(resourceType) {
+            switch(resourceType) {
+                case 'access': return 'accessBtn';
+                case 'guidance': return 'guidanceBtn';
+                case 'tools': return 'toolsBtn';
+				case 'forms': return 'formsBtn';
+				case 'standards': return 'standardsBtn';
+				case 'communications': return 'communicationsBtn';				
+                default: return null;
+            }
+        }
+
+        // Close on escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeResourceViewer();
+            }
+        });
+    </script>
+	<div id="infoViewerModal" class="resource-viewer-modal" style="display: none;">
+	  <div class="resource-viewer-content">
+		<div class="resource-viewer-header">
+		  <h3 id="infoViewerTitle">Info</h3>
+		  <button class="resource-viewer-close" onclick="closeInfoViewer()">
+			<i class="fa fa-times"></i>
+		  </button>
+		</div>
+		<div class="resource-content" style="padding: 2rem; background-color: var(--card-bg); color: white; overflow-y: auto;">
+		  <div id="infoViewerBody">
+			<!-- Filled by JavaScript -->
+		  </div>
+		</div>
+	  </div>
+	</div>
+	<script>
+	// Apply specific modal size override for contact modal
+	const contactModalStyle = document.createElement('style');
+	contactModalStyle.textContent = `
+	  #infoViewerModal.contact-modal .resource-viewer-content, #infoViewerModal.about-modal .resource-viewer-content,
+#infoViewerModal.faq-modal .resource-viewer-content, #infoViewerModal.help-modal .resource-viewer-content {
+		max-width: 700px;
+		height: auto;
+		max-height: 90vh;
+	  }
+	`;
+	document.head.appendChild(contactModalStyle);
+
+		function openInfoModal(type) {
+		  const modal = document.getElementById('infoViewerModal');
+		  const title = document.getElementById('infoViewerTitle');
+		  const body = document.getElementById('infoViewerBody');
+
+		  // Clear previous modal type classes
+		  modal.classList.remove('contact-modal', 'about-modal', 'faq-modal', 'help-modal');
+
+		  // Apply new modal class based on type
+		  if (type === 'contact') modal.classList.add('contact-modal');
+		  if (type === 'about') modal.classList.add('about-modal');
+		  if (type === 'faq') modal.classList.add('faq-modal');
+		  if (type === 'help') modal.classList.add('help-modal');
+
+		  // Set modal content
+		  if (type === 'contact') {
+			title.innerText = 'Contact Us';
+			body.innerHTML = `<!-- Contact form HTML here -->`;
+		  } else if (type === 'about') {
+			title.innerText = 'About Us';
+			body.innerHTML = `<!-- About Us content here -->`;
+		  } else if (type === 'faq') {
+			title.innerText = 'FAQ';
+			body.innerHTML = `<!-- FAQ content here -->`;
+		  } else if (type === 'help') {
+			title.innerText = 'Help Center';
+			body.innerHTML = `<!-- Help Center content here -->`;
+		  }
+
+		  modal.style.display = 'block';
+
+	  const content = {
+		faq: {
+			title: 'Frequently Asked Questions',
+			body: `
+				<div class="faq-list">
+					<div class="faq-item">
+						<p><strong>Q:</strong> I clicked "Load Resources" and now I'm in a modal vortex. Is this... forever?</p>
+						<p><strong>A:</strong> Yes. You are now one with the modal. Escape is futile. (Just kidding—hit the "X" at the top right. But we were going for dramatic.)</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> What is the difference between Single-Turn, and Extended, and Multi-Turn?</p>
+						<p><strong>A:</strong> Single-Turn is like a snack, Extended is a three-course meal, and Multi-Turn is an all-you-can-eat buffet where the food fights back.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Why is it called "Multi-Turn Caterpillar"?</p>
+						<p><strong>A:</strong> Because "Hydra-Threaded Nightmare" didn't make it past HR. Plus, caterpillars are cute. Until they start asking clarifying questions.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Do I have to use the tie-break flowchart?</p>
+						<p><strong>A:</strong> Only if you want to feel like a morally responsible data trainer and not just flip a coin again.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Why does everything glow?</p>
+						<p><strong>A:</strong> Because glowing = knowledge. Also because we couldn't afford a fancy UI but could afford CSS text-shadow.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> My rubric just hissed at me. Is that normal?</p>
+						<p><strong>A:</strong> Yes. That means it's calibrated. If it starts glowing, back away slowly and contact Jonathan.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> What's with the spinning loading dots?</p>
+						<p><strong>A:</strong> That's your soul processing tasks in real time. They're also a visual metaphor for waiting... and waiting... and—oh! It loaded.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> I keep seeing glowing orange text. Is that good?</p>
+						<p><strong>A:</strong> That's the sacred glow of interactivity. Praise it. Follow it. It leads to rubrics.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Why are the testimonials so oddly specific?</p>
+						<p><strong>A:</strong> Because they're real, probably. Don't question Jenna Rative or Al Gorithm... they've seen things.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> What things have they seen?</p>
+						<p><strong>A:</strong> Jenna emerged fully-formed from a rubric in 2022. We don't question her. We just aspire. Al was compiled during a thunderstorm in a server farm. He once optimized a webpage just by glaring at it. No one's seen him blink.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Can I open all resources in new tabs?</p>
+						<p><strong>A:</strong> Yes, if you enjoy playing whack-a-tab and explaining to your browser that it's not a pop-up attack.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Is there a password to get in?</p>
+						<p><strong>A:</strong> Yes. But we've cleverly encoded it with a level of security just above "reversed string in a cereal box decoder."</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> The background isn't moving. Is it supposed to do that?</p>
+						<p><strong>A:</strong> Yes. It's a parallax effect. Or a mild hallucination from grading too many tasks in one sitting. Either way, ride it out.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> What if I don't understand what a placeholder is?</p>
+						<p><strong>A:</strong> That's okay. Nobody really understands anything anymore. Click the guide. Pretend to absorb it. You're doing great.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Can I trust ChatGPT for help?</p>
+						<p><strong>A:</strong> Absolutely, until it gaslights you about what it said 30 seconds ago. Still, better than asking your cat.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> I forgot which page I'm on.</p>
+						<p><strong>A:</strong> If everything looks slightly different but feels exactly the same then you're on the right site.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> My webpage has 6 broken images, 3 external scripts, and a haunted iframe. Should I still give it a 3?</p>
+						<p><strong>A:</strong> As always, consult the vibes chart and ask yourself: would you let your grandma interact with this?</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Where's the "Not Useful Resources" button?</p>
+						<p><strong>A:</strong> It's hidden behind your will to keep scrolling. You'll know you've hit it when existential dread sets in.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Did ChatGPT write these FAQs?</p>
+						<p><strong>A:</strong> You're not my real mom!</p>
+					</div>
+				</div>
+			`
+		},
+		help: {
+		  title: 'Help Center',
+		  body: `
+				<div class="faq-list">
+					<div class="faq-item">
+						<p><strong>Q:</strong> Isn't this just the same as the FAQ section?</p>
+						<p><strong>A:</strong> It clearly says "Help Center" at the top.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> But it looks exactly like the FAQ section?</p>
+						<p><strong>A:</strong> Do you see this question in the FAQ section? Check and mate.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> I clicked "Load Resources" and now I'm in a modal vortex. Is this... forever?</p>
+						<p><strong>A:</strong> Yes. You are now one with the modal. Escape is futile. (Just kidding—hit the "X" at the top right. But we were going for dramatic.)</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> What is the difference between Single-Turn, and Extended, and Multi-Turn?</p>
+						<p><strong>A:</strong> Single-Turn is like a snack, Extended is a three-course meal, and Multi-Turn is an all-you-can-eat buffet where the food fights back.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Why is it called "Multi-Turn Caterpillar"?</p>
+						<p><strong>A:</strong> Because "Hydra-Threaded Nightmare" didn't make it past HR. Plus, caterpillars are cute. Until they start asking clarifying questions.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Do I have to use the tie-break flowchart?</p>
+						<p><strong>A:</strong> Only if you want to feel like a morally responsible data trainer and not just flip a coin again.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Why does everything glow?</p>
+						<p><strong>A:</strong> Because glowing = knowledge. Also because we couldn't afford a fancy UI but could afford CSS text-shadow.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> My rubric just hissed at me. Is that normal?</p>
+						<p><strong>A:</strong> Yes. That means it's calibrated. If it starts glowing, back away slowly and contact Jonathan.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> What's with the spinning loading dots?</p>
+						<p><strong>A:</strong> That's your soul processing tasks in real time. They're also a visual metaphor for waiting... and waiting... and—oh! It loaded.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> I keep seeing glowing orange text. Is that good?</p>
+						<p><strong>A:</strong> That's the sacred glow of interactivity. Praise it. Follow it. It leads to rubrics.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Why are the testimonials so oddly specific?</p>
+						<p><strong>A:</strong> Because they're real, probably. Don't question Jenna Rative or Al Gorithm... they've seen things.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> What things have they seen?</p>
+						<p><strong>A:</strong> Jenna emerged fully-formed from a rubric in 2022. We don't question her. We just aspire. Al was compiled during a thunderstorm in a server farm. He once optimized a webpage just by glaring at it. No one's seen him blink.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Can I open all resources in new tabs?</p>
+						<p><strong>A:</strong> Yes, if you enjoy playing whack-a-tab and explaining to your browser that it's not a pop-up attack.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Is there a password to get in?</p>
+						<p><strong>A:</strong> Yes. But we've cleverly encoded it with a level of security just above "reversed string in a cereal box decoder."</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> The background isn't moving. Is it supposed to do that?</p>
+						<p><strong>A:</strong> Yes. It's a parallax effect. Or a mild hallucination from grading too many tasks in one sitting. Either way, ride it out.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> What if I don't understand what a placeholder is?</p>
+						<p><strong>A:</strong> That's okay. Nobody really understands anything anymore. Click the guide. Pretend to absorb it. You're doing great.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Can I trust ChatGPT for help?</p>
+						<p><strong>A:</strong> Absolutely, until it gaslights you about what it said 30 seconds ago. Still, better than asking your cat.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> I forgot which page I'm on.</p>
+						<p><strong>A:</strong> If everything looks slightly different but feels exactly the same then you're on the right site.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> My webpage has 6 broken images, 3 external scripts, and a haunted iframe. Should I still give it a 3?</p>
+						<p><strong>A:</strong> As always, consult the vibes chart and ask yourself: would you let your grandma interact with this?</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Where's the "Not Useful Resources" button?</p>
+						<p><strong>A:</strong> It's hidden behind your will to keep scrolling. You'll know you've hit it when existential dread sets in.</p>
+					</div>
+					<div class="faq-item">
+						<p><strong>Q:</strong> Did ChatGPT write these FAQs?</p>
+						<p><strong>A:</strong> You're not my real mom!</p>
+					</div>
+				</div>
+			`
+		},
+		about: {
+		  title: 'About Us',
+		  body: `
+			<div style="max-width: 900px; margin: auto; font-family: 'Inter', sans-serif; color: #f5f5f5; line-height: 1.7;">
+			  <p><em>"In the beginning, there was only a blank page... and then someone asked, 'Where's the Submit button?' Thus began our story."</em></p>
+
+			  <p>We are the unseen, the unsung, the scrollers and graders of the web. Long ago (well, sometime around 2022, which feels like a century in AI years), we were chosen—not by fate, but by a Google Form. Our mission: to train AI on how to interact with webpages as though it were a very eager but slightly confused intern. An intern who clicks on everything, gets distracted by popups, and sometimes needs to be told, very gently, that no, that "Close" button isn't a purchase confirmation.</p>
+
+			  <p>We don't just grade tasks—we evaluate behaviors, clarify expectations, and nurture digital sentience through patience, precision, and way too many spreadsheets.</p>
+
+			  <h3 style="font-family: 'Playfair Display', serif; color: #ff7e00; margin-top: 36px;">We work across three great Campaign Tribes:</h3>
+
+			  <ul style="list-style-type: none; padding-left: 0;">
+				<li><strong>Classic</strong> – The foundational core. Simple. Pure. Like a single mighty tree on a hill. If the AI just needed to click a button and move on, this is where it happened.</li>
+				<li><strong>Extended</strong> – Complex. Challenging. Often with a flowchart in one hand and coffee in the other. Here, a page might change mid-task or a modal might sneak in like an uninvited raccoon.</li>
+				<li><strong>Multi-Turn</strong> – Our Odyssey. Dialogue dances between human and AI, weaving webs of logic and confusion. Multiple steps, judgment calls, and the occasional existential crisis.</li>
+			  </ul>
+
+			  <p>To the outside world, we may look like we're just "clicking things." But internally? We are analyzing placeholder usage with the intensity of a film critic dissecting a Kubrick frame. We are weighing if a tooltip delay is "inappropriate" or "just ill-mannered." We are the ones who know if a banner is deceptive before the banner does.</p>
+
+			  <h3 style="font-family: 'Playfair Display', serif; color: #ff7e00; margin-top: 36px;">Our tools are varied:</h3>
+
+			  <ul style="padding-left: 20px;">
+				<li>Rubrics forged in the fires of shared Docs.</li>
+				<li>Slack channels echoing with clarifying questions and the occasional cry for help.</li>
+				<li>Placeholder guides, flowcharts, submission forms, and media replacers—each one a sacred artifact in our arsenal.</li>
+				<li>And ChatGPT, always in the background, ready to offer suggestions, affirm your sanity, or create an unnecessary metaphor.</li>
+			  </ul>
+
+			  <p><br>
+				<strong>We do not fear the web.</strong> We parse it.<br>
+				<strong>We do not guess.</strong> We refer to the Source of Truth.<br>
+				<strong>We do not falter.</strong> We submit with confidence.
+			  </p>
+
+			  <p>And when we are done with a task, we whisper "AHT" like a prayer and hope it's under target.</p>
+			</div>
+		  `
+		},
+		contact: {
+		  title: 'Contact Us',
+		  body: `
+			<div style="max-width: 600px; margin: 0 auto;">
+			  <form id="contactForm" class="contact-form" action="xml-error.html" method="POST">
+				<div class="form-group">
+				  <label for="name">Name</label>
+				  <input type="text" id="name" name="name" required />
+				</div>
+				<div class="form-group">
+				  <label for="email">Email</label>
+				  <input type="email" id="email" name="email" required />
+				</div>
+				<div class="form-group">
+				  <label for="message">Message</label>
+				  <textarea id="message" name="message" rows="5" required></textarea>
+				</div>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			  </form>
+			</div>
+		  `
+		}
+	  };
+
+	  if (content[type]) {
+		title.textContent = content[type].title;
+		body.innerHTML = content[type].body;
+		modal.classList.toggle('contact-modal', type === 'contact');
+	  } else {
+		title.textContent = 'Unknown';
+		body.innerHTML = '<p>No content found.</p>';
+		modal.classList.remove('contact-modal');
+	  }
+
+	  modal.style.display = 'flex';
+	  setTimeout(() => modal.classList.add('show'), 10);
+	  document.body.classList.add('resource-viewer-open');
+	}
+
+	function closeInfoViewer() {
+	  const modal = document.getElementById('infoViewerModal');
+	  modal.classList.remove('show');
+	  document.body.classList.remove('resource-viewer-open');
+	  setTimeout(() => modal.style.display = 'none', 300);
+	}
+</script>
+</body>
+</html>
