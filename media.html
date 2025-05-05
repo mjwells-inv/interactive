@@ -1357,20 +1357,6 @@
 			  console.error('Audio error:', audio.error);
 			};
 			
-			// Add Direct Play Test button for debugging
-			const container = document.querySelector('.player-container');
-			const testButton = document.createElement('button');
-			testButton.textContent = 'Direct Play Test';
-			testButton.style.margin = '10px 0';
-			testButton.style.padding = '8px 15px';
-			testButton.style.backgroundColor = '#ff7e00';
-			testButton.style.color = 'white';
-			testButton.style.border = 'none';
-			testButton.style.borderRadius = '4px';
-			testButton.onclick = function() {
-			  directPlay();
-			};
-			container.appendChild(testButton);
 		  }
 		  
 		  // Direct play function (for test button)
