@@ -972,11 +972,11 @@
         <!-- Header -->
         <header>
             <div class="container header-container">
-                <a href="#" class="logo">Interactive<span> Webpages</span></a>
+                <a href="guide-main.html" class="logo">Interactive<span> Webpages</span></a>
                 <nav>
                     <ul>
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#resources">Resources</a></li>
+                        <li><a href="guide-main.html">Home</a></li>
+                        <li><a href="guide-main.html#resources">Resources</a></li>
                         <li><a href="#" onclick="event.preventDefault(); openInfoModal('contact')">Contact Us</a></li>
                     </ul>
                 </nav>
@@ -1114,7 +1114,7 @@
             <div class="container">
                 <div class="footer-top">
                     <div>
-                        <a href="#" class="footer-logo">Interactive<span> Webpages</span></a>
+                        <a href="guide-main.html" class="footer-logo">Interactive<span> Webpages</span></a>
                         <p>We provide comprehensive resources to help you excel in your journey of creating and evaluating interactive web experiences.</p>
                     </div>
                     <div class="footer-nav">
@@ -1128,7 +1128,7 @@
                     <div class="footer-nav">
                         <h3>Site Map</h3>
                         <ul>
-                            <li><a href="#">Home</a></li>
+                            <li><a href="guide-main.html">Home</a></li>
                             <li><a href="#" onclick="event.preventDefault(); openInfoModal('about')">About Us</a></li>
                             <li><a href="#" onclick="event.preventDefault(); openInfoModal('contact')">Contact Us</a></li>
                         </ul>
@@ -1166,49 +1166,177 @@
         const content = {
             faq: {
                 title: 'Frequently Asked Questions',
-                body: `
-                    <div class="faq-list">
-                        <div class="faq-item">
-                            <p><strong>Q:</strong> I clicked "Load Resources" and now I'm in a modal vortex. Is this... forever?</p>
-                            <p><strong>A:</strong> Yes. You are now one with the modal. Escape is futile. (Just kidding—hit the "X" at the top right. But we were going for dramatic.)</p>
-                        </div>
-                        <div class="faq-item">
-                            <p><strong>Q:</strong> What is the difference between Single-Turn, and Extended, and Multi-Turn?</p>
-                            <p><strong>A:</strong> Single-Turn is like a snack, Extended is a three-course meal, and Multi-Turn is an all-you-can-eat buffet where the food fights back.</p>
-                        </div>
-                        <div class="faq-item">
-                            <p><strong>Q:</strong> Why is it called "Multi-Turn Caterpillar"?</p>
-                            <p><strong>A:</strong> Because "Hydra-Threaded Nightmare" didn't make it past HR. Plus, caterpillars are cute. Until they start asking clarifying questions.</p>
-                        </div>
-                        <div class="faq-item">
-                            <p><strong>Q:</strong> Do I have to use the tie-break flowchart?</p>
-                            <p><strong>A:</strong> Only if you want to feel like a morally responsible data trainer and not just flip a coin again.</p>
-                        </div>
-                        <div class="faq-item">
-                            <p><strong>Q:</strong> Why does everything glow?</p>
-                            <p><strong>A:</strong> Because glowing = knowledge. Also because we couldn't afford a fancy UI but could afford CSS text-shadow.</p>
-                        </div>
-                    </div>
-                `
+                body:  `
+					<div class="faq-list">
+						<div class="faq-item">
+							<p><strong>Q:</strong> I clicked "Load Resources" and now I'm in a modal vortex. Is this... forever?</p>
+							<p><strong>A:</strong> Yes. You are now one with the modal. Escape is futile. (Just kidding—hit the "X" at the top right. But we were going for dramatic.)</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> What is the difference between Single-Turn, and Extended, and Multi-Turn?</p>
+							<p><strong>A:</strong> Single-Turn is like a snack, Extended is a three-course meal, and Multi-Turn is an all-you-can-eat buffet where the food fights back.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Why is it called "Multi-Turn Caterpillar"?</p>
+							<p><strong>A:</strong> Because "Hydra-Threaded Nightmare" didn't make it past HR. Plus, caterpillars are cute. Until they start asking clarifying questions.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Do I have to use the tie-break flowchart?</p>
+							<p><strong>A:</strong> Only if you want to feel like a morally responsible data trainer and not just flip a coin again.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Why does everything glow?</p>
+							<p><strong>A:</strong> Because glowing = knowledge. Also because we couldn't afford a fancy UI but could afford CSS text-shadow.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> My rubric just hissed at me. Is that normal?</p>
+							<p><strong>A:</strong> Yes. That means it's calibrated. If it starts glowing, back away slowly and contact Jonathan.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> What's with the spinning loading dots?</p>
+							<p><strong>A:</strong> That's your soul processing tasks in real time. They're also a visual metaphor for waiting... and waiting... and—oh! It loaded.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> I keep seeing glowing orange text. Is that good?</p>
+							<p><strong>A:</strong> That's the sacred glow of interactivity. Praise it. Follow it. It leads to rubrics.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Why are the testimonials so oddly specific?</p>
+							<p><strong>A:</strong> Because they're real, probably. Don't question Jenna Rative or Al Gorithm... they've seen things.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> What things have they seen?</p>
+							<p><strong>A:</strong> Jenna emerged fully-formed from a rubric in 2022. We don't question her. We just aspire. Al was compiled during a thunderstorm in a server farm. He once optimized a webpage just by glaring at it. No one's seen him blink.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Can I open all resources in new tabs?</p>
+							<p><strong>A:</strong> Yes, if you enjoy playing whack-a-tab and explaining to your browser that it's not a pop-up attack.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Is there a password to get in?</p>
+							<p><strong>A:</strong> Yes. But we've cleverly encoded it with a level of security just above "reversed string in a cereal box decoder."</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> The background isn't moving. Is it supposed to do that?</p>
+							<p><strong>A:</strong> Yes. It's a parallax effect. Or a mild hallucination from grading too many tasks in one sitting. Either way, ride it out.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> What if I don't understand what a placeholder is?</p>
+							<p><strong>A:</strong> That's okay. Nobody really understands anything anymore. Click the guide. Pretend to absorb it. You're doing great.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Can I trust ChatGPT for help?</p>
+							<p><strong>A:</strong> Absolutely, until it gaslights you about what it said 30 seconds ago. Still, better than asking your cat.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> I forgot which page I'm on.</p>
+							<p><strong>A:</strong> If everything looks slightly different but feels exactly the same then you're on the right site.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> My webpage has 6 broken images, 3 external scripts, and a haunted iframe. Should I still give it a 3?</p>
+							<p><strong>A:</strong> As always, consult the vibes chart and ask yourself: would you let your grandma interact with this?</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Where's the "Not Useful Resources" button?</p>
+							<p><strong>A:</strong> It's hidden behind your will to keep scrolling. You'll know you've hit it when existential dread sets in.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Did ChatGPT write these FAQs?</p>
+							<p><strong>A:</strong> You're not my real mom!</p>
+						</div>
+					</div>
+				`
             },
             help: {
                 title: 'Help Center',
-                body: `
-                    <div class="faq-list">
-                        <div class="faq-item">
-                            <p><strong>Q:</strong> Isn't this just the same as the FAQ section?</p>
-                            <p><strong>A:</strong> It clearly says "Help Center" at the top.</p>
-                        </div>
-                        <div class="faq-item">
-                            <p><strong>Q:</strong> But it looks exactly like the FAQ section?</p>
-                            <p><strong>A:</strong> Do you see this question in the FAQ section? Check and mate.</p>
-                        </div>
-                        <div class="faq-item">
-                            <p><strong>Q:</strong> I need help with the Music Player!</p>
-                            <p><strong>A:</strong> Click the play button to play music. Click it again to stop the music. Revolutionary, we know.</p>
-                        </div>
-                    </div>
-                `
+                body:  `
+					<div class="faq-list">
+						<div class="faq-item">
+							<p><strong>Q:</strong> Isn't this just the same as the FAQ section?</p>
+							<p><strong>A:</strong> It clearly says "Help Center" at the top.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> But it looks exactly like the FAQ section?</p>
+							<p><strong>A:</strong> Do you see this question in the FAQ section? Check and mate.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> I clicked "Load Resources" and now I'm in a modal vortex. Is this... forever?</p>
+							<p><strong>A:</strong> Yes. You are now one with the modal. Escape is futile. (Just kidding—hit the "X" at the top right. But we were going for dramatic.)</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> What is the difference between Single-Turn, and Extended, and Multi-Turn?</p>
+							<p><strong>A:</strong> Single-Turn is like a snack, Extended is a three-course meal, and Multi-Turn is an all-you-can-eat buffet where the food fights back.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Why is it called "Multi-Turn Caterpillar"?</p>
+							<p><strong>A:</strong> Because "Hydra-Threaded Nightmare" didn't make it past HR. Plus, caterpillars are cute. Until they start asking clarifying questions.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Do I have to use the tie-break flowchart?</p>
+							<p><strong>A:</strong> Only if you want to feel like a morally responsible data trainer and not just flip a coin again.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Why does everything glow?</p>
+							<p><strong>A:</strong> Because glowing = knowledge. Also because we couldn't afford a fancy UI but could afford CSS text-shadow.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> My rubric just hissed at me. Is that normal?</p>
+							<p><strong>A:</strong> Yes. That means it's calibrated. If it starts glowing, back away slowly and contact Jonathan.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> What's with the spinning loading dots?</p>
+							<p><strong>A:</strong> That's your soul processing tasks in real time. They're also a visual metaphor for waiting... and waiting... and—oh! It loaded.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> I keep seeing glowing orange text. Is that good?</p>
+							<p><strong>A:</strong> That's the sacred glow of interactivity. Praise it. Follow it. It leads to rubrics.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Why are the testimonials so oddly specific?</p>
+							<p><strong>A:</strong> Because they're real, probably. Don't question Jenna Rative or Al Gorithm... they've seen things.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> What things have they seen?</p>
+							<p><strong>A:</strong> Jenna emerged fully-formed from a rubric in 2022. We don't question her. We just aspire. Al was compiled during a thunderstorm in a server farm. He once optimized a webpage just by glaring at it. No one's seen him blink.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Can I open all resources in new tabs?</p>
+							<p><strong>A:</strong> Yes, if you enjoy playing whack-a-tab and explaining to your browser that it's not a pop-up attack.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Is there a password to get in?</p>
+							<p><strong>A:</strong> Yes. But we've cleverly encoded it with a level of security just above "reversed string in a cereal box decoder."</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> The background isn't moving. Is it supposed to do that?</p>
+							<p><strong>A:</strong> Yes. It's a parallax effect. Or a mild hallucination from grading too many tasks in one sitting. Either way, ride it out.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> What if I don't understand what a placeholder is?</p>
+							<p><strong>A:</strong> That's okay. Nobody really understands anything anymore. Click the guide. Pretend to absorb it. You're doing great.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Can I trust ChatGPT for help?</p>
+							<p><strong>A:</strong> Absolutely, until it gaslights you about what it said 30 seconds ago. Still, better than asking your cat.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> I forgot which page I'm on.</p>
+							<p><strong>A:</strong> If everything looks slightly different but feels exactly the same then you're on the right site.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> My webpage has 6 broken images, 3 external scripts, and a haunted iframe. Should I still give it a 3?</p>
+							<p><strong>A:</strong> As always, consult the vibes chart and ask yourself: would you let your grandma interact with this?</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Where's the "Not Useful Resources" button?</p>
+							<p><strong>A:</strong> It's hidden behind your will to keep scrolling. You'll know you've hit it when existential dread sets in.</p>
+						</div>
+						<div class="faq-item">
+							<p><strong>Q:</strong> Did ChatGPT write these FAQs?</p>
+							<p><strong>A:</strong> You're not my real mom!</p>
+						</div>
+					</div>
+				`
             },
             about: {
                 title: 'About Us',
