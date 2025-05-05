@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player - Interactive Webpages</title>
+    <link rel="icon" type="image/x-icon" href="faviconIW.png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-color: #1a1a1a;
+            --secondary-color: #222;
+            --accent-color: #ff7e00;
+            --text-color: #f5f5f5;
+            --light-gray: rgba(40, 40, 40, 0.9);
+            --medium-gray: #444;
+            --font-primary: 'Inter', sans-serif;
+            --font-heading: 'Playfair Display', serif;
+            --card-bg: rgba(25, 25, 25, 0.85);
+            --footer-bg: rgba(15, 15, 15, 0.9);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        body {
+            font-family: var(--font-primary);
+            color: var(--text-color);
+            line-height: 1.6;
+            background-color: transparent;
+            min-height: 100%;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Parallax Background */
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('00025-3174985494.png');
+            background-size: cover;
+            background-position: center;
+            z-index: -1;
+        }
+        
+        .parallax-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0,0,0,0.80) 0%, rgba(20,20,30,0.65) 100%);
+            z-index: -1;
+        }
+        
+        /* Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5 {
+            font-family: var(--font-heading);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        h1 {
+            font-size: 4rem;
+            letter-spacing: -0.02em;
+        }
+        
+        h2 {
+            font-size: 3rem;
+            letter-spacing: -0.01em;
+        }
+        
+        h3 {
+            font-size: 2rem;
+        }
+        
+        p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        
+        /* Layout */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .col {
+            flex: 1;
+            padding: 1rem;
+        }
+        
+        /* Header */
+        header {
+            padding: 1.5rem 0;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background-color: transparent;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .logo span {
+            color: var(--accent-color);
+        }
+        
+        /* Navigation */
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 2rem;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: white;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+        
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 30vh;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+            padding-top: 60px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.4) 100%);
+            z-index: 0;
+        }
+        
+        .subtitle {
+            font-family: var(--font-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-color);
+        }
+        
+        /* Section with Background */
+.player-section {
+    padding: 4rem 0;
+    background-color: rgba(25, 25, 25, 0.3); /* you had 0. instead of 0.85 */
+    backdrop-filter: blur(5px);
+}
+
+.player-section, .section {
+    padding: 2rem 0; /* ensure same padding as .player-section */
+    background-color: rgba(25, 25, 25, 0.3); /* match background */
+    backdrop-filter: blur(5px);
+}
+        
+        .section-bg {
+            background-color: var(--light-gray);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3rem;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+        
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: var(--card-bg);
+            height: 100%;
+            backdrop-filter: blur(10px);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        
+        .card-image {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .card-content {
+            padding: 1.5rem;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        
+        /* CTA Section */
+        .cta {
+            position: relative;
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 5rem 0;
+        }
+        
+        .cta-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cta-content {
+            max-width: 600px;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: var(--footer-bg);
+            color: white;
+            padding: 5rem 0 2rem;
+            position: relative;
+        }
+        
+        .footer-top {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+        
+        .footer-logo {
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+            display: block;
+            text-decoration: none;
+        }
+        
+        .footer-logo span {
+            color: var(--accent-color);
+        }
+        
+        .footer-nav h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+        
+        .footer-nav ul {
+            list-style: none;
+        }
+        
+        .footer-nav ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-nav ul li a {
+            color: #aaa;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-nav ul li a:hover {
+            color: white;
+        }
+        
+        .footer-bottom {
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+        
+        /* Glow Effects */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(255, 126, 0, 0.5);
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-primary);
+            min-width: 150px;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #e57200;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 126, 0, 0.4);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            color: white;
+            border: 1px solid white;
+        }
+        
+        .btn-outline:hover {
+            background-color: white;
+            color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.4);
+        }
+
+        /* Audio Player Styles */
+        .audio-player {
+            background-color: rgba(25, 25, 25, 0.85);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            backdrop-filter: blur(10px);
+        }
+        
+        .visualizer-container {
+            width: 100%;
+            height: 200px;
+            background-color: rgba(25, 25, 25, 0.95);
+            overflow: hidden;
+        }
+        
+        #visualizer {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .player-container {
+            padding: 1.5rem;
+        }
+        
+        .track-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .track-info h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+            color: white;
+        }
+        
+        .track-info p {
+            margin: 0.3rem 0 0 0;
+            color: #aaa;
+        }
+        
+        .btn-icon {
+            background-color: rgba(40, 40, 40, 0.9);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-icon:hover {
+            background-color: rgba(60, 60, 60, 0.9);
+            color: var(--accent-color);
+        }
+        
+        .btn-play {
+            background-color: var(--accent-color);
+            border: none;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0 1.5rem;
+        }
+        
+        .btn-play:hover {
+            background-color: #e57200;
+            transform: scale(1.05);
+        }
+        
+        .btn-play i {
+            font-size: 1.5rem;
+        }
+        
+        .playlist-container {
+            background-color: rgba(30, 30, 30, 0.9);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+        
+        .playlist-container h4 {
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        
+        .playlist {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .playlist-item {
+            padding: 0.75rem;
+            border-radius: 6px;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .playlist-item:hover {
+            background-color: rgba(50, 50, 50, 0.9);
+        }
+        
+        .playlist-item.active {
+            background-color: var(--accent-color);
+        }
+        
+        .playlist-item-title {
+            font-weight: 500;
+            color: white;
+            margin: 0;
+        }
+        
+        .playlist-item-artist {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin: 0;
+        }
+        
+        .progress-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .seek-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--medium-gray);
+            outline: none;
+            margin: 0;
+        }
+        
+        .seek-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+        }
+        
+        .seek-slider::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            border: none;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: #aaa;
+            margin-top: 0.5rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .main-controls {
+            display: flex;
+            align-items: center;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            width: 120px;
+        }
+        
+        .volume-control i {
+            color: #aaa;
+            margin-right: 0.5rem;
+        }
+        
+        .volume-slider {
+            -webkit-appearance: none;
+            height: 4px;
+            border-radius: px;
+            background: var(--medium-gray);
+            outline: none;
+        }
+		
+		.volume-slider {
+			max-width: 95px; /* Adjust as needed */
+			width: 100%;
+		}
+        
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+        }
+        
+        .volume-slider::-moz-range-thumb {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            border: none;
+        }
+        
+        /* Playing animation for active track */
+        .playing-indicator {
+            display: flex;
+            gap: 2px;
+        }
+        
+        .playing-bar {
+            width: 3px;
+            height: 15px;
+            background-color: white;
+            animation: sound 1.2s ease-in-out infinite;
+        }
+        
+        .playing-bar:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .playing-bar:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes sound {
+            0% { height: 4px; }
+            50% { height: 15px; }
+            100% { height: 4px; }
+        }
+        
+        /* Login Overlay */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.85);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-form {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 2.5rem;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+        
+        .login-form h2 {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+        
+        .login-form input {
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 6px;
+            border: 1px solid var(--medium-gray);
+            background-color: var(--light-gray);
+            color: white;
+            margin-bottom: 1rem;
+        }
+        
+        .login-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #ddd;
+            font-weight: 500;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both !important;
+        }
+        
+        /* Info Modal Styles */
+        .resource-viewer-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .resource-viewer-modal.show {
+            opacity: 1;
+        }
+
+        .resource-viewer-content {
+            background-color: var(--card-bg);
+            width: 95%;
+            height: 90%;
+            max-width: 2000px;
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .resource-viewer-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+
+        .resource-viewer-header h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: white;
+        }
+
+        .resource-viewer-close {
+            background: none;
+            border: none;
+            color: #aaa;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .resource-viewer-close:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        #infoViewerModal.contact-modal .resource-viewer-content,
+        #infoViewerModal.about-modal .resource-viewer-content,
+        #infoViewerModal.faq-modal .resource-viewer-content,
+        #infoViewerModal.help-modal .resource-viewer-content {
+            max-width: 700px;
+            height: auto;
+            max-height: 90vh;
+        }
+        
+        /* Contact form */
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            padding: 1rem 0;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            color: var(--accent-color);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            padding: 0.75rem 1rem;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 6px;
+            color: white;
+            font-family: var(--font-primary);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            background-color: rgba(255, 255, 255, 0.08);
+        }
+        
+        /* FAQ list */
+        .faq-list {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: white;
+        }
+
+        .faq-item {
+            background-color: rgba(255, 255, 255, 0.03);
+            border-left: 4px solid var(--accent-color);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 126, 0, 0.05);
+            transition: background-color 0.3s ease;
+        }
+
+        .faq-item:hover {
+            background-color: rgba(255, 126, 0, 0.05);
+        }
+        
+        /* Media Queries */
+        @media (max-width: 1024px) {
+            h1 { font-size: 3.5rem; }
+            h2 { font-size: 2.5rem; }
+        }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2.8rem; }
+            h2 { font-size: 2rem; }
+            .hero { min-height: auto; padding: 6rem 0; }
+            .controls { flex-direction: column; gap: 1rem; }
+            .volume-control { width: 100%; }
+        }
+        
+        @media (max-width: 576px) {
+            h1 { font-size: 2.2rem; }
+            .header-container { flex-direction: column; }
+            nav ul { margin-top: 1rem; }
+            nav ul li { margin-left: 0.75rem; margin-right: 0.75rem; }
+            .card-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <script>
+    // Check authentication immediately as the page loads
+    // This script runs before the body is rendered
+    (function() {
+        if (localStorage.getItem('IWauthenticatedIW') === 'true') {
+            // Create a style tag to hide the login overlay
+            document.write('<style>#login-overlay{display:none !important;}</style>');
+        }
+    })();
+    </script>
+    
+    <!-- Login Overlay -->
+    <div id="login-overlay">
+        <div class="login-form">
+            <h2>Interactive Webpages</h2>
+            <div style="border-bottom: 3px solid var(--accent-color); width: 50px; margin: 0 auto 2rem;"></div>
+            
+            <div style="margin-bottom: 1.5rem;">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter username">
+            </div>
+            
+            <div style="margin-bottom: 2rem;">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password">
+            </div>
+            
+            <button id="login-btn" class="btn btn-primary" style="width: 100%; padding: 0.8rem; font-weight: 600;">
+                <span id="login-text">Log In</span>
+                <span id="login-spinner" style="display: none; width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: white; animation: spin 1s linear infinite; margin-left: 8px; vertical-align: middle;"></span>
+            </button>
+            
+            <p id="login-error" style="color: #ff5252; margin-top: 1rem; text-align: center; display: none; font-size: 0.9rem;">Invalid username or password</p>
+        </div>
+    </div>
+
+    <!-- Info Viewer Modal -->
+    <div id="infoViewerModal" class="resource-viewer-modal" style="display: none;">
+        <div class="resource-viewer-content">
+            <div class="resource-viewer-header">
+                <h3 id="infoViewerTitle">Info</h3>
+                <button class="resource-viewer-close" onclick="closeInfoViewer()">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="resource-content" style="padding: 2rem; background-color: var(--card-bg); color: white; overflow-y: auto;">
+                <div id="infoViewerBody">
+                    <!-- Filled by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parallax Background -->
+    <div class="parallax-bg"></div>
+    <div class="parallax-overlay"></div>
+    
+    <div class="content-wrapper">
+        <!-- Header -->
+        <header>
+            <div class="container header-container">
+                <a href="#" class="logo">Interactive<span> Webpages</span></a>
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#resources">Resources</a></li>
+                        <li><a href="#" onclick="event.preventDefault(); openInfoModal('contact')">Contact Us</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+        
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <p class="subtitle">Interactive Audio</p>
+                    <h1 class="glow-text">Music Player</h1>
+                    <p>Explore your favorite tracks with our custom audio player featuring real-time visualization.</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Audio Player Section -->
+        <section class="player-section">
+            <div class="container">
+                <!-- Audio Player -->
+                <div class="audio-player">
+                    <!-- Visualizer canvas -->
+                    <div class="visualizer-container">
+                        <canvas id="visualizer" width="800" height="200"></canvas>
+                    </div>
+                    
+                    <!-- Track Info -->
+                    <div class="player-container">
+                        <div class="track-info">
+                            <div>
+                                <h3 id="track-title">Song Title</h3>
+                                <p id="track-artist">Artist Name</p>
+                            </div>
+                            <button id="playlist-toggle" class="btn-icon">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                        
+                        <!-- Playlist -->
+                        <div id="playlist-container" class="playlist-container" style="display: none;">
+                            <h4>Playlist</h4>
+                            <ul id="playlist" class="playlist">
+                                <!-- Playlist items will be added by JavaScript -->
+                            </ul>
+                        </div>
+                        
+                        <!-- Progress bar -->
+                        <div class="progress-container">
+                            <input type="range" id="seek-slider" min="0" max="100" value="0" step="1" class="seek-slider">
+                            <div class="time-display">
+                                <span id="current-time">00:00</span>
+                                <span id="duration">00:00</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Controls -->
+                        <div class="controls">
+                            <div class="main-controls">
+                                <button id="prev-button" class="btn-icon">
+                                    <i class="fas fa-step-backward"></i>
+                                </button>
+                                <button id="play-button" class="btn-play">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button id="next-button" class="btn-icon">
+                                    <i class="fas fa-step-forward"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="volume-control">
+                                <i class="fas fa-volume-up"></i>
+                                <input type="range" id="volume-slider" min="0" max="1" value="0.7" step="0.01" class="volume-slider">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Audio Element -->
+                    <audio id="audio" preload="metadata"></audio>
+                </div>
+            </div>
+ <br><br>
+            <div class="container">
+                <div class="section-header">
+                    <h2 class="section-title glow-text">Featured Playlists</h2>
+                    <p>Curated collections for every mood and moment.</p>
+                </div>
+                <div class="card-grid">
+                    <!-- Playlist Card 1 -->
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/500x300/?concert');"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">Summer Vibes</h3>
+                            <p>Upbeat tracks to keep your energy high all summer long.</p>
+                            <a href="#" class="btn btn-primary">Play Now</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Playlist Card 2 -->
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/500x300/?studio');"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">Chill Study</h3>
+                            <p>Focus-enhancing ambient tracks for productive study sessions.</p>
+                            <a href="#" class="btn btn-primary">Play Now</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Playlist Card 3 -->
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/500x300/?dj');"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">Party Mix</h3>
+                            <p>Get the party started with these high-energy dance tracks.</p>
+                            <a href="#" class="btn btn-primary">Play Now</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Playlist Card 4 -->
+                    <div class="card">
+                        <div class="card-image" style="background-image: url('https://source.unsplash.com/random/500x300/?jazz');"></div>
+                        <div class="card-content">
+                            <h3 class="card-title">Relaxation</h3>
+                            <p>Unwind with calming melodies and peaceful soundscapes.</p>
+                            <a href="#" class="btn btn-primary">Play Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			<br> <br>
+        </section>
+        
+        <!-- Footer -->
+        <footer>
+            <div class="container">
+                <div class="footer-top">
+                    <div>
+                        <a href="#" class="footer-logo">Interactive<span> Webpages</span></a>
+                        <p>We provide comprehensive resources to help you excel in your journey of creating and evaluating interactive web experiences.</p>
+                    </div>
+                    <div class="footer-nav">
+                        <h3>Resources</h3>
+                        <ul>
+                            <li><a href="guide-single.html">Single-Turn</a></li>
+                            <li><a href="guide-extended.html">Extended</a></li>
+                            <li><a href="guide-multi.html">Multi-Turn</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-nav">
+                        <h3>Site Map</h3>
+                        <ul>
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#" onclick="event.preventDefault(); openInfoModal('about')">About Us</a></li>
+                            <li><a href="#" onclick="event.preventDefault(); openInfoModal('contact')">Contact Us</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-nav">
+                        <h3>Support</h3>
+                        <ul>
+                            <li><a href="#" onclick="event.preventDefault(); openInfoModal('faq')">FAQs</a></li>
+                            <li><a href="#" onclick="event.preventDefault(); openInfoModal('help')">Help Center</a></li>
+                            <li><a href="#" onclick="event.preventDefault(); openInfoModal('contact')">Report Issues</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 Maximum Functionality of Five. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Login JavaScript -->
+    <script>
+		// This script fixes the audio player issues
+		// Replace the existing script in your music player HTML file
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Elements
+  const audio = document.getElementById('audio');
+  const visualizer = document.getElementById('visualizer');
+  const playButton = document.getElementById('play-button');
+  const prevButton = document.getElementById('prev-button');
+  const nextButton = document.getElementById('next-button');
+  const seekSlider = document.getElementById('seek-slider');
+  const volumeSlider = document.getElementById('volume-slider');
+  const currentTimeElement = document.getElementById('current-time');
+  const durationElement = document.getElementById('duration');
+  const trackTitleElement = document.getElementById('track-title');
+  const trackArtistElement = document.getElementById('track-artist');
+  const playlistToggle = document.getElementById('playlist-toggle');
+  const playlistContainer = document.getElementById('playlist-container');
+  const playlistElement = document.getElementById('playlist');
+  
+  // State
+  let isPlaying = false;
+  let currentTrackIndex = 0;
+  let audioContextInitialized = false;
+  let audioContext, analyzer, source;
+  let animationFrame;
+  
+  // Track list with public domain audio sources
+  const tracks = [
+    {
+      title: 'Bach - Prelude in C',
+      artist: 'Classical',
+      src: 'overreact.ogg'
+    },
+    {
+      title: 'Moonlight Sonata',
+      artist: 'Beethoven',
+      src: 'overreact.ogg'
+    },
+    {
+      title: 'Für Elise',
+      artist: 'Beethoven',
+      src: 'overreact.ogg'
+    }
+  ];
+  
+  // Initialize player
+  function init() {
+    // Set initial track
+    loadTrack(currentTrackIndex);
+    
+    // Set initial volume
+    audio.volume = volumeSlider.value;
+    
+    // Create playlist items
+    createPlaylist();
+    
+    // Add event listeners
+    playButton.addEventListener('click', togglePlay);
+    prevButton.addEventListener('click', playPrev);
+    nextButton.addEventListener('click', playNext);
+    seekSlider.addEventListener('input', seekTo);
+    volumeSlider.addEventListener('input', setVolume);
+    playlistToggle.addEventListener('click', togglePlaylist);
+    
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('loadedmetadata', updateDuration);
+    audio.addEventListener('ended', playNext);
+    
+    // Initial button state
+    updatePlayButton();
+  }
+  
+  // Load track
+  function loadTrack(index) {
+    if (index < 0) index = tracks.length - 1;
+    if (index >= tracks.length) index = 0;
+    
+    currentTrackIndex = index;
+    
+    // Reset source if already created
+    if (source) {
+      source.disconnect();
+      source = null;
+    }
+    
+    // Stop current track if playing
+    if (isPlaying) {
+      audio.pause();
+    }
+    
+    // Update audio source
+    audio.src = tracks[index].src;
+    
+    // Update track info
+    trackTitleElement.textContent = tracks[index].title;
+    trackArtistElement.textContent = tracks[index].artist;
+    
+    // Reset progress
+    seekSlider.value = 0;
+    currentTimeElement.textContent = '00:00';
+    
+    // Update playlist active item
+    updateActivePlaylistItem();
+    
+    // If was playing, start the new track
+    if (isPlaying) {
+      playAudio();
+    }
+  }
+  
+  // Play audio function
+  function playAudio() {
+    // Create audio context on first play
+    if (!audioContextInitialized) {
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyzer = audioContext.createAnalyser();
+        analyzer.fftSize = 256;
+        audioContextInitialized = true;
+      } catch (e) {
+        console.error('Web Audio API not supported:', e);
+      }
+    }
+    
+    // Play the audio
+    audio.play().then(() => {
+      isPlaying = true;
+      updatePlayButton();
+      
+      // Connect to audio context after play starts
+      if (audioContextInitialized && !source) {
+        try {
+          // Create a new source from the audio element
+          source = audioContext.createMediaElementSource(audio);
+          source.connect(analyzer);
+          analyzer.connect(audioContext.destination);
+          
+          // Start visualization
+          visualize();
+        } catch (e) {
+          console.error('Error connecting audio to analyzer:', e);
+        }
+      }
+    }).catch(e => {
+      console.error('Playback failed:', e);
+      alert('Audio playback failed. This may be due to browser restrictions or missing files.');
+    });
+  }
+  
+  // Play/pause toggle
+  function togglePlay() {
+    if (audio.paused) {
+      playAudio();
+    } else {
+      audio.pause();
+      isPlaying = false;
+      if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+      }
+      updatePlayButton();
+    }
+  }
+  
+  // Update play/pause button
+  function updatePlayButton() {
+    if (isPlaying) {
+      playButton.innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+      playButton.innerHTML = '<i class="fas fa-play"></i>';
+    }
+  }
+  
+  // Play previous track
+  function playPrev() {
+    loadTrack(currentTrackIndex - 1);
+    if (isPlaying) {
+      playAudio();
+    }
+  }
+  
+  // Play next track
+  function playNext() {
+    loadTrack(currentTrackIndex + 1);
+    if (isPlaying) {
+      playAudio();
+    }
+  }
+  
+  // Seek to position
+  function seekTo() {
+    if (!isNaN(audio.duration)) {
+      audio.currentTime = seekSlider.value;
+    }
+  }
+  
+  // Set volume
+  function setVolume() {
+    audio.volume = volumeSlider.value;
+  }
+  
+  // Update progress bar
+  function updateProgress() {
+    if (!isNaN(audio.duration)) {
+      seekSlider.value = audio.currentTime;
+      seekSlider.max = audio.duration;
+      currentTimeElement.textContent = formatTime(audio.currentTime);
+      
+      // Update slider background for progress
+      const percent = (audio.currentTime / audio.duration) * 100;
+      seekSlider.style.background = `linear-gradient(to right, var(--accent-color) 0%, var(--accent-color) ${percent}%, var(--medium-gray) ${percent}%, var(--medium-gray) 100%)`;
+    }
+  }
+  
+  // Update duration display
+  function updateDuration() {
+    if (!isNaN(audio.duration)) {
+      durationElement.textContent = formatTime(audio.duration);
+      seekSlider.max = audio.duration;
+    }
+  }
+  
+  // Format time in MM:SS
+  function formatTime(time) {
+    const minutes = Math.floor(time / 60) || 0;
+    const seconds = Math.floor(time % 60) || 0;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+  
+  // Create playlist items
+  function createPlaylist() {
+    playlistElement.innerHTML = '';
+    
+    tracks.forEach((track, index) => {
+      const item = document.createElement('li');
+      item.className = 'playlist-item';
+      item.dataset.index = index;
+      if (index === currentTrackIndex) {
+        item.classList.add('active');
+      }
+      
+      const title = document.createElement('p');
+      title.className = 'playlist-item-title';
+      title.textContent = track.title;
+      
+      const artist = document.createElement('p');
+      artist.className = 'playlist-item-artist';
+      artist.textContent = track.artist;
+      
+      // Playing indicator
+      let playingIndicator = '';
+      if (index === currentTrackIndex && isPlaying) {
+        playingIndicator = `
+          <div class="playing-indicator">
+            <div class="playing-bar"></div>
+            <div class="playing-bar"></div>
+            <div class="playing-bar"></div>
+          </div>
+        `;
+      }
+      
+      item.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            ${title.outerHTML}
+            ${artist.outerHTML}
+          </div>
+          ${playingIndicator}
+        </div>
+      `;
+      
+      item.addEventListener('click', () => {
+        loadTrack(index);
+        if (!isPlaying) {
+          togglePlay();
+        } else {
+          playAudio();
+        }
+      });
+      
+      playlistElement.appendChild(item);
+    });
+  }
+  
+  // Update active playlist item
+  function updateActivePlaylistItem() {
+    const items = playlistElement.querySelectorAll('.playlist-item');
+    
+    items.forEach((item, index) => {
+      if (index === currentTrackIndex) {
+        item.classList.add('active');
+        
+        // Add playing indicator if playing
+        if (isPlaying) {
+          const indicatorContainer = document.createElement('div');
+          indicatorContainer.className = 'playing-indicator';
+          
+          for (let i = 0; i < 3; i++) {
+            const bar = document.createElement('div');
+            bar.className = 'playing-bar';
+            indicatorContainer.appendChild(bar);
+          }
+          
+          const content = item.querySelector('div');
+          const existingIndicator = content.querySelector('.playing-indicator');
+          
+          if (!existingIndicator) {
+            content.appendChild(indicatorContainer);
+          }
+        } else {
+          const existingIndicator = item.querySelector('.playing-indicator');
+          if (existingIndicator) {
+            existingIndicator.remove();
+          }
+        }
+      } else {
+        item.classList.remove('active');
+        const existingIndicator = item.querySelector('.playing-indicator');
+        if (existingIndicator) {
+          existingIndicator.remove();
+        }
+      }
+    });
+  }
+  
+  // Toggle playlist visibility
+  function togglePlaylist() {
+    if (playlistContainer.style.display === 'none') {
+      playlistContainer.style.display = 'block';
+      playlistToggle.innerHTML = '<i class="fas fa-times"></i>';
+    } else {
+      playlistContainer.style.display = 'none';
+      playlistToggle.innerHTML = '<i class="fas fa-list"></i>';
+    }
+  }
+  
+  // Visualize audio
+  function visualize() {
+    if (!analyzer || !visualizer) return;
+    
+    const canvas = visualizer;
+    const canvasCtx = canvas.getContext('2d');
+    const bufferLength = analyzer.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+    
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+    
+    canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+    
+    function draw() {
+      animationFrame = requestAnimationFrame(draw);
+      
+      analyzer.getByteFrequencyData(dataArray);
+      
+      canvasCtx.fillStyle = 'rgba(25, 25, 25, 0.2)';
+      canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+      
+      const barWidth = (WIDTH / bufferLength) * 2.5;
+      let barHeight;
+      let x = 0;
+      
+      for (let i = 0; i < bufferLength; i++) {
+        barHeight = (dataArray[i] / 255) * HEIGHT;
+        
+        // Create gradient for bars
+        const gradient = canvasCtx.createLinearGradient(0, HEIGHT, 0, HEIGHT - barHeight);
+        gradient.addColorStop(0, '#ff7e00');  // Orange accent color
+        gradient.addColorStop(1, '#e57200');  // Slightly darker orange
+        
+        canvasCtx.fillStyle = gradient;
+        canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+        
+        x += barWidth + 1;
+      }
+    }
+    
+    draw();
+  }
+  
+  // Initialize player
+  init();
+});
+    </script>
+
+    <!-- Info Modal JavaScript -->
+    <script>
+    function openInfoModal(type) {
+        const modal = document.getElementById('infoViewerModal');
+        const title = document.getElementById('infoViewerTitle');
+        const body = document.getElementById('infoViewerBody');
+
+        // Clear previous modal type classes
+        modal.classList.remove('contact-modal', 'about-modal', 'faq-modal', 'help-modal');
+
+        // Apply new modal class based on type
+        modal.classList.add(type + '-modal');
+
+        // Content for different modal types
+        const content = {
+            faq: {
+                title: 'Frequently Asked Questions',
+                body: `
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <p><strong>Q:</strong> I clicked "Load Resources" and now I'm in a modal vortex. Is this... forever?</p>
+                            <p><strong>A:</strong> Yes. You are now one with the modal. Escape is futile. (Just kidding—hit the "X" at the top right. But we were going for dramatic.)</p>
+                        </div>
+                        <div class="faq-item">
+                            <p><strong>Q:</strong> What is the difference between Single-Turn, and Extended, and Multi-Turn?</p>
+                            <p><strong>A:</strong> Single-Turn is like a snack, Extended is a three-course meal, and Multi-Turn is an all-you-can-eat buffet where the food fights back.</p>
+                        </div>
+                        <div class="faq-item">
+                            <p><strong>Q:</strong> Why is it called "Multi-Turn Caterpillar"?</p>
+                            <p><strong>A:</strong> Because "Hydra-Threaded Nightmare" didn't make it past HR. Plus, caterpillars are cute. Until they start asking clarifying questions.</p>
+                        </div>
+                        <div class="faq-item">
+                            <p><strong>Q:</strong> Do I have to use the tie-break flowchart?</p>
+                            <p><strong>A:</strong> Only if you want to feel like a morally responsible data trainer and not just flip a coin again.</p>
+                        </div>
+                        <div class="faq-item">
+                            <p><strong>Q:</strong> Why does everything glow?</p>
+                            <p><strong>A:</strong> Because glowing = knowledge. Also because we couldn't afford a fancy UI but could afford CSS text-shadow.</p>
+                        </div>
+                    </div>
+                `
+            },
+            help: {
+                title: 'Help Center',
+                body: `
+                    <div class="faq-list">
+                        <div class="faq-item">
+                            <p><strong>Q:</strong> Isn't this just the same as the FAQ section?</p>
+                            <p><strong>A:</strong> It clearly says "Help Center" at the top.</p>
+                        </div>
+                        <div class="faq-item">
+                            <p><strong>Q:</strong> But it looks exactly like the FAQ section?</p>
+                            <p><strong>A:</strong> Do you see this question in the FAQ section? Check and mate.</p>
+                        </div>
+                        <div class="faq-item">
+                            <p><strong>Q:</strong> I need help with the Music Player!</p>
+                            <p><strong>A:</strong> Click the play button to play music. Click it again to stop the music. Revolutionary, we know.</p>
+                        </div>
+                    </div>
+                `
+            },
+            about: {
+                title: 'About Us',
+                body: `
+                    <div style="max-width: 900px; margin: auto; font-family: 'Inter', sans-serif; color: #f5f5f5; line-height: 1.7;">
+                        <p><em>"In the beginning, there was only a blank page... and then someone asked, 'Where's the Submit button?' Thus began our story."</em></p>
+
+                        <p>We are the unseen, the unsung, the scrollers and graders of the web. Long ago (well, sometime around 2022, which feels like a century in AI years), we were chosen—not by fate, but by a Google Form. Our mission: to train AI on how to interact with webpages as though it were a very eager but slightly confused intern.</p>
+
+                        <p>We don't just grade tasks—we evaluate behaviors, clarify expectations, and nurture digital sentience through patience, precision, and way too many spreadsheets.</p>
+
+                        <h3 style="font-family: 'Playfair Display', serif; color: #ff7e00; margin-top: 36px;">We work across three great Campaign Tribes:</h3>
+
+                        <ul style="list-style-type: none; padding-left: 0;">
+                            <li><strong>Classic</strong> – The foundational core. Simple. Pure. Like a single mighty tree on a hill.</li>
+                            <li><strong>Extended</strong> – Complex. Challenging. Often with a flowchart in one hand and coffee in the other.</li>
+                            <li><strong>Multi-Turn</strong> – Our Odyssey. Dialogue dances between human and AI, weaving webs of logic and confusion.</li>
+                        </ul>
+                    </div>
+                `
+            },
+            contact: {
+                title: 'Contact Us',
+                body: `
+                    <div style="max-width: 600px; margin: 0 auto;">
+                        <form id="contactForm" class="contact-form" action="xml-error.html" method="GET">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </div>
+                `
+            }
+        };
+
+        if (content[type]) {
+            title.textContent = content[type].title;
+            body.innerHTML = content[type].body;
+        } else {
+            title.textContent = 'Unknown';
+            body.innerHTML = '<p>No content found.</p>';
+        }
+
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('show'), 10);
+        document.body.classList.add('resource-viewer-open');
+    }
+
+    function closeInfoViewer() {
+        const modal = document.getElementById('infoViewerModal');
+        modal.classList.remove('show');
+        document.body.classList.remove('resource-viewer-open');
+        setTimeout(() => modal.style.display = 'none', 300);
+    }
+    </script>
+
+    <!-- JavaScript for Audio Player -->
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Elements
+  const audio = document.getElementById('audio');
+  const playButton = document.getElementById('play-button');
+  const prevButton = document.getElementById('prev-button');
+  const nextButton = document.getElementById('next-button');
+  const seekSlider = document.getElementById('seek-slider');
+  const volumeSlider = document.getElementById('volume-slider');
+  const currentTimeElement = document.getElementById('current-time');
+  const durationElement = document.getElementById('duration');
+  const trackTitleElement = document.getElementById('track-title');
+  const trackArtistElement = document.getElementById('track-artist');
+  const playlistToggle = document.getElementById('playlist-toggle');
+  const playlistContainer = document.getElementById('playlist-container');
+  const playlistElement = document.getElementById('playlist');
+  
+  // State
+  let isPlaying = false;
+  let currentTrackIndex = 0;
+  
+  // Track list with public domain audio sources
+  const tracks = [
+    {
+      title: 'Bachs - Prelude in C',
+      artist: 'Classical',
+      src: 'overreact.ogg'
+    },
+    {
+      title: 'Moonlight Sonata',
+      artist: 'Beethoven',
+      src: 'overreact.ogg'
+    },
+    {
+      title: 'Für Elise',
+      artist: 'Beethoven',
+      src: 'overreact.ogg'
+    }
+  ];
+  
+  // Initialize
+  function init() {
+    // Set initial track
+    loadTrack(currentTrackIndex);
+    
+    // Set initial volume
+    audio.volume = volumeSlider.value;
+    
+    // Create playlist items
+    createPlaylist();
+    
+    // Event listeners
+    playButton.addEventListener('click', togglePlay);
+    prevButton.addEventListener('click', playPrev);
+    nextButton.addEventListener('click', playNext);
+    seekSlider.addEventListener('input', seekTo);
+    volumeSlider.addEventListener('input', setVolume);
+    playlistToggle.addEventListener('click', togglePlaylist);
+    
+    audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('loadedmetadata', updateDuration);
+    audio.addEventListener('ended', playNext);
+    
+    // Initial button state
+    updatePlayButton();
+  }
+  
+  // Load track
+  function loadTrack(index) {
+    if (index < 0) index = tracks.length - 1;
+    if (index >= tracks.length) index = 0;
+    
+    currentTrackIndex = index;
+    
+    // Stop current track if playing
+    if (isPlaying) {
+      audio.pause();
+    }
+    
+    // Update audio source
+    audio.src = tracks[index].src;
+    
+    // Update track info
+    trackTitleElement.textContent = tracks[index].title;
+    trackArtistElement.textContent = tracks[index].artist;
+    
+    // Reset progress
+    seekSlider.value = 0;
+    currentTimeElement.textContent = '00:00';
+    
+    // Update playlist active item
+    updateActivePlaylistItem();
+    
+    // If was playing, start the new track
+    if (isPlaying) {
+      playAudio();
+    }
+  }
+  
+  // Play audio
+  function playAudio() {
+    const playPromise = audio.play();
+    
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        isPlaying = true;
+        updatePlayButton();
+      }).catch(e => {
+        console.error('Playback failed:', e);
+        isPlaying = false;
+        updatePlayButton();
+      });
+    }
+  }
+  
+  // Play/pause toggle
+  function togglePlay() {
+    if (audio.paused) {
+      playAudio();
+    } else {
+      audio.pause();
+      isPlaying = false;
+      updatePlayButton();
+    }
+  }
+  
+  // Update play/pause button
+  function updatePlayButton() {
+    if (isPlaying) {
+      playButton.innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+      playButton.innerHTML = '<i class="fas fa-play"></i>';
+    }
+  }
+  
+  // Play previous track
+  function playPrev() {
+    loadTrack(currentTrackIndex - 1);
+    if (isPlaying) {
+      playAudio();
+    }
+  }
+  
+  // Play next track
+  function playNext() {
+    loadTrack(currentTrackIndex + 1);
+    if (isPlaying) {
+      playAudio();
+    }
+  }
+  
+  // Seek to position
+  function seekTo() {
+    if (!isNaN(audio.duration)) {
+      audio.currentTime = seekSlider.value;
+    }
+  }
+  
+  // Set volume
+  function setVolume() {
+    audio.volume = volumeSlider.value;
+  }
+  
+  // Update progress bar
+  function updateProgress() {
+    if (!isNaN(audio.duration)) {
+      seekSlider.value = audio.currentTime;
+      seekSlider.max = audio.duration;
+      currentTimeElement.textContent = formatTime(audio.currentTime);
+      
+      // Update slider background for progress
+      const percent = (audio.currentTime / audio.duration) * 100;
+      seekSlider.style.background = `linear-gradient(to right, var(--accent-color) 0%, var(--accent-color) ${percent}%, var(--medium-gray) ${percent}%, var(--medium-gray) 100%)`;
+    }
+  }
+  
+  // Update duration display
+  function updateDuration() {
+    if (!isNaN(audio.duration)) {
+      durationElement.textContent = formatTime(audio.duration);
+      seekSlider.max = audio.duration;
+    }
+  }
+  
+  // Format time in MM:SS
+  function formatTime(time) {
+    const minutes = Math.floor(time / 60) || 0;
+    const seconds = Math.floor(time % 60) || 0;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+  
+  // Create playlist items
+  function createPlaylist() {
+    playlistElement.innerHTML = '';
+    
+    tracks.forEach((track, index) => {
+      const item = document.createElement('li');
+      item.className = 'playlist-item';
+      item.dataset.index = index;
+      if (index === currentTrackIndex) {
+        item.classList.add('active');
+      }
+      
+      const title = document.createElement('p');
+      title.className = 'playlist-item-title';
+      title.textContent = track.title;
+      
+      const artist = document.createElement('p');
+      artist.className = 'playlist-item-artist';
+      artist.textContent = track.artist;
+      
+      item.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            ${title.outerHTML}
+            ${artist.outerHTML}
+          </div>
+        </div>
+      `;
+      
+      item.addEventListener('click', () => {
+        loadTrack(index);
+        if (!isPlaying) {
+          togglePlay();
+        } else {
+          playAudio();
+        }
+      });
+      
+      playlistElement.appendChild(item);
+    });
+  }
+  
+  // Update active playlist item
+  function updateActivePlaylistItem() {
+    const items = playlistElement.querySelectorAll('.playlist-item');
+    
+    items.forEach((item, index) => {
+      if (index === currentTrackIndex) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  }
+  
+  // Toggle playlist visibility
+  function togglePlaylist() {
+    if (playlistContainer.style.display === 'none') {
+      playlistContainer.style.display = 'block';
+      playlistToggle.innerHTML = '<i class="fas fa-times"></i>';
+    } else {
+      playlistContainer.style.display = 'none';
+      playlistToggle.innerHTML = '<i class="fas fa-list"></i>';
+    }
+  }
+  
+  // Initialize player
+  init();
+});
+    </script>
+</body>
+</html>
