@@ -1687,7 +1687,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Track list
   const tracks = [
     {
-      title: 'Bach - Prelude in CD',
+      title: 'Bach22 - Prelude in CD',
       artist: 'Classical',
       src: 'overreact.ogg' // Using your actual filename
     },
@@ -1924,6 +1924,43 @@ document.addEventListener('DOMContentLoaded', function() {
     updatePlayButton();
   };
   container.appendChild(testButton);
+  // Add this code at the end of your existing JavaScript
+// This will override just the play button functionality
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the play button and audio element
+  const playButton = document.getElementById('play-button');
+  const audio = document.getElementById('audio');
+  
+  // Remove any existing click handlers from the play button
+  const newPlayBtn = playButton.cloneNode(true);
+  playButton.parentNode.replaceChild(newPlayBtn, playButton);
+  
+  // Add a fresh click handler
+  newPlayBtn.addEventListener('click', function() {
+    console.log('Play button clicked with new handler');
+    
+    if (audio.paused) {
+      // Play audio and update button
+      audio.play();
+      this.innerHTML = '<i class="fas fa-pause"></i>';
+      
+      // If we have a visualizer setup, connect to it
+      if (window.connectAudio && typeof window.connectAudio === 'function') {
+        window.connectAudio();
+      }
+    } else {
+      // Pause audio and update button
+      audio.pause();
+      this.innerHTML = '<i class="fas fa-play"></i>';
+      
+      // If we have an animation frame, cancel it
+      if (window.animationFrame) {
+        cancelAnimationFrame(window.animationFrame);
+      }
+    }
+  });
+});
 });
     </script>
 </body>
