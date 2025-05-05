@@ -1148,393 +1148,6 @@
             </div>
         </footer>
     </div>
-    
-    <!-- Login JavaScript -->
-    <script>
-		// This script fixes the audio player issues
-		// Replace the existing script in your music player HTML file
-
-document.addEventListener('DOMContentLoaded', function() {
-  // Elements
-  const audio = document.getElementById('audio');
-  const visualizer = document.getElementById('visualizer');
-  const playButton = document.getElementById('play-button');
-  const prevButton = document.getElementById('prev-button');
-  const nextButton = document.getElementById('next-button');
-  const seekSlider = document.getElementById('seek-slider');
-  const volumeSlider = document.getElementById('volume-slider');
-  const currentTimeElement = document.getElementById('current-time');
-  const durationElement = document.getElementById('duration');
-  const trackTitleElement = document.getElementById('track-title');
-  const trackArtistElement = document.getElementById('track-artist');
-  const playlistToggle = document.getElementById('playlist-toggle');
-  const playlistContainer = document.getElementById('playlist-container');
-  const playlistElement = document.getElementById('playlist');
-  
-  // State
-  let isPlaying = false;
-  let currentTrackIndex = 0;
-  let audioContextInitialized = false;
-  let audioContext, analyzer, source;
-  let animationFrame;
-  
-  // Track list with public domain audio sources
-  const tracks = [
-    {
-      title: 'Bach - Prelude in C',
-      artist: 'Classical',
-      src: 'overreact.ogg'
-    },
-    {
-      title: 'Moonlight Sonata',
-      artist: 'Beethoven',
-      src: 'overreact.ogg'
-    },
-    {
-      title: 'Für Elise',
-      artist: 'Beethoven',
-      src: 'overreact.ogg'
-    }
-  ];
-  
-  // Initialize player
-  function init() {
-    // Set initial track
-    loadTrack(currentTrackIndex);
-    
-    // Set initial volume
-    audio.volume = volumeSlider.value;
-    
-    // Create playlist items
-    createPlaylist();
-    
-    // Add event listeners
-    playButton.addEventListener('click', togglePlay);
-    prevButton.addEventListener('click', playPrev);
-    nextButton.addEventListener('click', playNext);
-    seekSlider.addEventListener('input', seekTo);
-    volumeSlider.addEventListener('input', setVolume);
-    playlistToggle.addEventListener('click', togglePlaylist);
-    
-    audio.addEventListener('timeupdate', updateProgress);
-    audio.addEventListener('loadedmetadata', updateDuration);
-    audio.addEventListener('ended', playNext);
-    
-    // Initial button state
-    updatePlayButton();
-  }
-  
-  // Load track
-  function loadTrack(index) {
-    if (index < 0) index = tracks.length - 1;
-    if (index >= tracks.length) index = 0;
-    
-    currentTrackIndex = index;
-    
-    // Reset source if already created
-    if (source) {
-      source.disconnect();
-      source = null;
-    }
-    
-    // Stop current track if playing
-    if (isPlaying) {
-      audio.pause();
-    }
-    
-    // Update audio source
-    audio.src = tracks[index].src;
-    
-    // Update track info
-    trackTitleElement.textContent = tracks[index].title;
-    trackArtistElement.textContent = tracks[index].artist;
-    
-    // Reset progress
-    seekSlider.value = 0;
-    currentTimeElement.textContent = '00:00';
-    
-    // Update playlist active item
-    updateActivePlaylistItem();
-    
-    // If was playing, start the new track
-    if (isPlaying) {
-      playAudio();
-    }
-  }
-  
-  // Play audio function
-  function playAudio() {
-    // Create audio context on first play
-    if (!audioContextInitialized) {
-      try {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        analyzer = audioContext.createAnalyser();
-        analyzer.fftSize = 256;
-        audioContextInitialized = true;
-      } catch (e) {
-        console.error('Web Audio API not supported:', e);
-      }
-    }
-    
-    // Play the audio
-    audio.play().then(() => {
-      isPlaying = true;
-      updatePlayButton();
-      
-      // Connect to audio context after play starts
-      if (audioContextInitialized && !source) {
-        try {
-          // Create a new source from the audio element
-          source = audioContext.createMediaElementSource(audio);
-          source.connect(analyzer);
-          analyzer.connect(audioContext.destination);
-          
-          // Start visualization
-          visualize();
-        } catch (e) {
-          console.error('Error connecting audio to analyzer:', e);
-        }
-      }
-    }).catch(e => {
-      console.error('Playback failed:', e);
-      alert('Audio playback failed. This may be due to browser restrictions or missing files.');
-    });
-  }
-  
-  // Play/pause toggle
-  function togglePlay() {
-    if (audio.paused) {
-      playAudio();
-    } else {
-      audio.pause();
-      isPlaying = false;
-      if (animationFrame) {
-        cancelAnimationFrame(animationFrame);
-      }
-      updatePlayButton();
-    }
-  }
-  
-  // Update play/pause button
-  function updatePlayButton() {
-    if (isPlaying) {
-      playButton.innerHTML = '<i class="fas fa-pause"></i>';
-    } else {
-      playButton.innerHTML = '<i class="fas fa-play"></i>';
-    }
-  }
-  
-  // Play previous track
-  function playPrev() {
-    loadTrack(currentTrackIndex - 1);
-    if (isPlaying) {
-      playAudio();
-    }
-  }
-  
-  // Play next track
-  function playNext() {
-    loadTrack(currentTrackIndex + 1);
-    if (isPlaying) {
-      playAudio();
-    }
-  }
-  
-  // Seek to position
-  function seekTo() {
-    if (!isNaN(audio.duration)) {
-      audio.currentTime = seekSlider.value;
-    }
-  }
-  
-  // Set volume
-  function setVolume() {
-    audio.volume = volumeSlider.value;
-  }
-  
-  // Update progress bar
-  function updateProgress() {
-    if (!isNaN(audio.duration)) {
-      seekSlider.value = audio.currentTime;
-      seekSlider.max = audio.duration;
-      currentTimeElement.textContent = formatTime(audio.currentTime);
-      
-      // Update slider background for progress
-      const percent = (audio.currentTime / audio.duration) * 100;
-      seekSlider.style.background = `linear-gradient(to right, var(--accent-color) 0%, var(--accent-color) ${percent}%, var(--medium-gray) ${percent}%, var(--medium-gray) 100%)`;
-    }
-  }
-  
-  // Update duration display
-  function updateDuration() {
-    if (!isNaN(audio.duration)) {
-      durationElement.textContent = formatTime(audio.duration);
-      seekSlider.max = audio.duration;
-    }
-  }
-  
-  // Format time in MM:SS
-  function formatTime(time) {
-    const minutes = Math.floor(time / 60) || 0;
-    const seconds = Math.floor(time % 60) || 0;
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  }
-  
-  // Create playlist items
-  function createPlaylist() {
-    playlistElement.innerHTML = '';
-    
-    tracks.forEach((track, index) => {
-      const item = document.createElement('li');
-      item.className = 'playlist-item';
-      item.dataset.index = index;
-      if (index === currentTrackIndex) {
-        item.classList.add('active');
-      }
-      
-      const title = document.createElement('p');
-      title.className = 'playlist-item-title';
-      title.textContent = track.title;
-      
-      const artist = document.createElement('p');
-      artist.className = 'playlist-item-artist';
-      artist.textContent = track.artist;
-      
-      // Playing indicator
-      let playingIndicator = '';
-      if (index === currentTrackIndex && isPlaying) {
-        playingIndicator = `
-          <div class="playing-indicator">
-            <div class="playing-bar"></div>
-            <div class="playing-bar"></div>
-            <div class="playing-bar"></div>
-          </div>
-        `;
-      }
-      
-      item.innerHTML = `
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <div>
-            ${title.outerHTML}
-            ${artist.outerHTML}
-          </div>
-          ${playingIndicator}
-        </div>
-      `;
-      
-      item.addEventListener('click', () => {
-        loadTrack(index);
-        if (!isPlaying) {
-          togglePlay();
-        } else {
-          playAudio();
-        }
-      });
-      
-      playlistElement.appendChild(item);
-    });
-  }
-  
-  // Update active playlist item
-  function updateActivePlaylistItem() {
-    const items = playlistElement.querySelectorAll('.playlist-item');
-    
-    items.forEach((item, index) => {
-      if (index === currentTrackIndex) {
-        item.classList.add('active');
-        
-        // Add playing indicator if playing
-        if (isPlaying) {
-          const indicatorContainer = document.createElement('div');
-          indicatorContainer.className = 'playing-indicator';
-          
-          for (let i = 0; i < 3; i++) {
-            const bar = document.createElement('div');
-            bar.className = 'playing-bar';
-            indicatorContainer.appendChild(bar);
-          }
-          
-          const content = item.querySelector('div');
-          const existingIndicator = content.querySelector('.playing-indicator');
-          
-          if (!existingIndicator) {
-            content.appendChild(indicatorContainer);
-          }
-        } else {
-          const existingIndicator = item.querySelector('.playing-indicator');
-          if (existingIndicator) {
-            existingIndicator.remove();
-          }
-        }
-      } else {
-        item.classList.remove('active');
-        const existingIndicator = item.querySelector('.playing-indicator');
-        if (existingIndicator) {
-          existingIndicator.remove();
-        }
-      }
-    });
-  }
-  
-  // Toggle playlist visibility
-  function togglePlaylist() {
-    if (playlistContainer.style.display === 'none') {
-      playlistContainer.style.display = 'block';
-      playlistToggle.innerHTML = '<i class="fas fa-times"></i>';
-    } else {
-      playlistContainer.style.display = 'none';
-      playlistToggle.innerHTML = '<i class="fas fa-list"></i>';
-    }
-  }
-  
-  // Visualize audio
-  function visualize() {
-    if (!analyzer || !visualizer) return;
-    
-    const canvas = visualizer;
-    const canvasCtx = canvas.getContext('2d');
-    const bufferLength = analyzer.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-    
-    const WIDTH = canvas.width;
-    const HEIGHT = canvas.height;
-    
-    canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
-    
-    function draw() {
-      animationFrame = requestAnimationFrame(draw);
-      
-      analyzer.getByteFrequencyData(dataArray);
-      
-      canvasCtx.fillStyle = 'rgba(25, 25, 25, 0.2)';
-      canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
-      
-      const barWidth = (WIDTH / bufferLength) * 2.5;
-      let barHeight;
-      let x = 0;
-      
-      for (let i = 0; i < bufferLength; i++) {
-        barHeight = (dataArray[i] / 255) * HEIGHT;
-        
-        // Create gradient for bars
-        const gradient = canvasCtx.createLinearGradient(0, HEIGHT, 0, HEIGHT - barHeight);
-        gradient.addColorStop(0, '#ff7e00');  // Orange accent color
-        gradient.addColorStop(1, '#e57200');  // Slightly darker orange
-        
-        canvasCtx.fillStyle = gradient;
-        canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
-        
-        x += barWidth + 1;
-      }
-    }
-    
-    draw();
-  }
-  
-  // Initialize player
-  init();
-});
-    </script>
 
     <!-- Info Modal JavaScript -->
     <script>
@@ -1664,304 +1277,374 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <!-- JavaScript for Audio Player -->
     <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Elements
-  const audio = document.getElementById('audio');
-  const playButton = document.getElementById('play-button');
-  const prevButton = document.getElementById('prev-button');
-  const nextButton = document.getElementById('next-button');
-  const seekSlider = document.getElementById('seek-slider');
-  const volumeSlider = document.getElementById('volume-slider');
-  const currentTimeElement = document.getElementById('current-time');
-  const durationElement = document.getElementById('duration');
-  const trackTitleElement = document.getElementById('track-title');
-  const trackArtistElement = document.getElementById('track-artist');
-  const playlistToggle = document.getElementById('playlist-toggle');
-  const playlistContainer = document.getElementById('playlist-container');
-  const playlistElement = document.getElementById('playlist');
-  
-  // State
-  let isPlaying = false;
-  let currentTrackIndex = 0;
-  
-  // Track list
-  const tracks = [
-    {
-      title: 'Bach22 - Prelude in CD',
-      artist: 'Classical',
-      src: 'overreact.ogg' // Using your actual filename
-    },
-    {
-      title: 'Moonlight Sonata',
-      artist: 'Beethoven',
-      src: 'overreact.ogg' // Using the same file for testing
-    },
-    {
-      title: 'Für Elise',
-      artist: 'Beethoven',
-      src: 'overreact.ogg' // Using the same file for testing
-    }
-  ];
-  
-  // Initialize
-  function init() {
-    // Set initial track
-    loadTrack(currentTrackIndex);
-    
-    // Set initial volume
-    audio.volume = volumeSlider.value;
-    
-    // Create playlist items
-    createPlaylist();
-    
-    // Event listeners - THE KEY DIFFERENCE IS HERE!
-    // We're using simpler event handling
-    playButton.onclick = togglePlay;
-    prevButton.onclick = playPrev;
-    nextButton.onclick = playNext;
-    seekSlider.oninput = seekTo;
-    volumeSlider.oninput = setVolume;
-    playlistToggle.onclick = togglePlaylist;
-    
-    audio.ontimeupdate = updateProgress;
-    audio.onloadedmetadata = updateDuration;
-    audio.onended = playNext;
-    
-    // Force load the audio to ensure it's ready
-    audio.load();
-  }
-  
-  // Load track
-  function loadTrack(index) {
-    if (index < 0) index = tracks.length - 1;
-    if (index >= tracks.length) index = 0;
-    
-    currentTrackIndex = index;
-    
-    // Simply update the source
-    audio.src = tracks[index].src;
-    audio.load(); // Force load
-    
-    // Update track info
-    trackTitleElement.textContent = tracks[index].title;
-    trackArtistElement.textContent = tracks[index].artist;
-    
-    // Reset progress
-    seekSlider.value = 0;
-    currentTimeElement.textContent = '00:00';
-    
-    // Update playlist active item
-    updateActivePlaylistItem();
-    
-    // If was playing, start the new track
-    if (isPlaying) {
-      setTimeout(function() { // Give it a moment to load
-        audio.play();
-      }, 100);
-    }
-  }
-  
-  // Play/pause toggle - SIMPLIFIED
-  function togglePlay() {
-    if (audio.paused) {
-      // Simple play approach
-      audio.play();
-      isPlaying = true;
-    } else {
-      audio.pause();
-      isPlaying = false;
-    }
-    updatePlayButton();
-  }
-  
-  // Update play/pause button
-  function updatePlayButton() {
-    if (isPlaying) {
-      playButton.innerHTML = '<i class="fas fa-pause"></i>';
-    } else {
-      playButton.innerHTML = '<i class="fas fa-play"></i>';
-    }
-  }
-  
-  // Play previous track
-  function playPrev() {
-    loadTrack(currentTrackIndex - 1);
-    if (isPlaying) {
-      setTimeout(function() {
-        audio.play();
-      }, 100);
-    }
-  }
-  
-  // Play next track
-  function playNext() {
-    loadTrack(currentTrackIndex + 1);
-    if (isPlaying) {
-      setTimeout(function() {
-        audio.play();
-      }, 100);
-    }
-  }
-  
-  // Seek to position
-  function seekTo() {
-    if (!isNaN(audio.duration)) {
-      audio.currentTime = seekSlider.value;
-    }
-  }
-  
-  // Set volume
-  function setVolume() {
-    audio.volume = volumeSlider.value;
-  }
-  
-  // Update progress bar
-  function updateProgress() {
-    if (!isNaN(audio.duration)) {
-      seekSlider.value = audio.currentTime;
-      seekSlider.max = audio.duration;
-      currentTimeElement.textContent = formatTime(audio.currentTime);
-      
-      // Update slider background for progress
-      const percent = (audio.currentTime / audio.duration) * 100;
-      seekSlider.style.background = `linear-gradient(to right, var(--accent-color) 0%, var(--accent-color) ${percent}%, var(--medium-gray) ${percent}%, var(--medium-gray) 100%)`;
-    }
-  }
-  
-  // Update duration display
-  function updateDuration() {
-    if (!isNaN(audio.duration)) {
-      durationElement.textContent = formatTime(audio.duration);
-      seekSlider.max = audio.duration;
-    }
-  }
-  
-  // Format time in MM:SS
-  function formatTime(time) {
-    const minutes = Math.floor(time / 60) || 0;
-    const seconds = Math.floor(time % 60) || 0;
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  }
-  
-  // Create playlist items - simplified
-  function createPlaylist() {
-    playlistElement.innerHTML = '';
-    
-    tracks.forEach((track, index) => {
-      const item = document.createElement('li');
-      item.className = 'playlist-item';
-      if (index === currentTrackIndex) {
-        item.classList.add('active');
-      }
-      
-      item.innerHTML = `
-        <div>
-          <p class="playlist-item-title">${track.title}</p>
-          <p class="playlist-item-artist">${track.artist}</p>
-        </div>
-      `;
-      
-      item.onclick = function() {
-        loadTrack(index);
-        if (isPlaying) {
-          setTimeout(function() {
-            audio.play();
-          }, 100);
-        } else {
-          isPlaying = true;
-          setTimeout(function() {
-            audio.play();
-          }, 100);
-          updatePlayButton();
-        }
-      };
-      
-      playlistElement.appendChild(item);
-    });
-  }
-  
-  // Update active playlist item - simplified
-  function updateActivePlaylistItem() {
-    const items = playlistElement.querySelectorAll('.playlist-item');
-    
-    items.forEach((item, index) => {
-      if (index === currentTrackIndex) {
-        item.classList.add('active');
-      } else {
-        item.classList.remove('active');
-      }
-    });
-  }
-  
-  // Toggle playlist visibility
-  function togglePlaylist() {
-    if (playlistContainer.style.display === 'none') {
-      playlistContainer.style.display = 'block';
-      playlistToggle.innerHTML = '<i class="fas fa-times"></i>';
-    } else {
-      playlistContainer.style.display = 'none';
-      playlistToggle.innerHTML = '<i class="fas fa-list"></i>';
-    }
-  }
-  
-  // Initialize player
-  init();
-  
-  // Add a button to test direct play
-  const container = document.querySelector('.player-container');
-  const testButton = document.createElement('button');
-  testButton.textContent = 'Direct Play Test';
-  testButton.style.margin = '10px 0';
-  testButton.style.padding = '8px 15px';
-  testButton.style.backgroundColor = '#ff7e00';
-  testButton.style.color = 'white';
-  testButton.style.border = 'none';
-  testButton.style.borderRadius = '4px';
-  testButton.onclick = function() {
-    // Just try to directly play the audio element
-    audio.play();
-    isPlaying = true;
-    updatePlayButton();
-  };
-  container.appendChild(testButton);
-  // Add this code at the end of your existing JavaScript
-// This will override just the play button functionality
-
-document.addEventListener('DOMContentLoaded', function() {
-  // Get the play button and audio element
-  const playButton = document.getElementById('play-button');
-  const audio = document.getElementById('audio');
-  
-  // Remove any existing click handlers from the play button
-  const newPlayBtn = playButton.cloneNode(true);
-  playButton.parentNode.replaceChild(newPlayBtn, playButton);
-  
-  // Add a fresh click handler
-  newPlayBtn.addEventListener('click', function() {
-    console.log('Play button clicked with new handler');
-    
-    if (audio.paused) {
-      // Play audio and update button
-      audio.play();
-      this.innerHTML = '<i class="fas fa-pause"></i>';
-      
-      // If we have a visualizer setup, connect to it
-      if (window.connectAudio && typeof window.connectAudio === 'function') {
-        window.connectAudio();
-      }
-    } else {
-      // Pause audio and update button
-      audio.pause();
-      this.innerHTML = '<i class="fas fa-play"></i>';
-      
-      // If we have an animation frame, cancel it
-      if (window.animationFrame) {
-        cancelAnimationFrame(window.animationFrame);
-      }
-    }
-  });
-});
-});
+		document.addEventListener('DOMContentLoaded', function() {
+		  // Elements
+		  const audio = document.getElementById('audio');
+		  const visualizer = document.getElementById('visualizer');
+		  const playButton = document.getElementById('play-button');
+		  const prevButton = document.getElementById('prev-button');
+		  const nextButton = document.getElementById('next-button');
+		  const seekSlider = document.getElementById('seek-slider');
+		  const volumeSlider = document.getElementById('volume-slider');
+		  const currentTimeElement = document.getElementById('current-time');
+		  const durationElement = document.getElementById('duration');
+		  const trackTitleElement = document.getElementById('track-title');
+		  const trackArtistElement = document.getElementById('track-artist');
+		  const playlistToggle = document.getElementById('playlist-toggle');
+		  const playlistContainer = document.getElementById('playlist-container');
+		  const playlistElement = document.getElementById('playlist');
+		  
+		  // Global audio context variables
+		  let audioContext = null;
+		  let analyzer = null;
+		  let source = null;
+		  let animationFrame = null;
+		  
+		  // State
+		  let isPlaying = false;
+		  let currentTrackIndex = 0;
+		  
+		  // Track list - update with your actual tracks
+		  const tracks = [
+			{
+			  title: 'Bach - Prelude in C',
+			  artist: 'Classical',
+			  src: 'overreact.ogg'
+			},
+			{
+			  title: 'Moonlight Sonata',
+			  artist: 'Beethoven',
+			  src: 'overreact.ogg'
+			},
+			{
+			  title: 'Für Elise',
+			  artist: 'Beethoven',
+			  src: 'overreact.ogg'
+			}
+		  ];
+		  
+		  // Initialize
+		  function init() {
+			console.log('Initializing player');
+			
+			// Set initial track
+			loadTrack(currentTrackIndex);
+			
+			// Set initial volume
+			audio.volume = volumeSlider.value;
+			
+			// Create playlist items
+			createPlaylist();
+			
+			// Set up event listeners with direct assignment
+			playButton.onclick = togglePlay;
+			prevButton.onclick = playPrev;
+			nextButton.onclick = playNext;
+			seekSlider.oninput = seekTo;
+			volumeSlider.oninput = setVolume;
+			playlistToggle.onclick = togglePlaylist;
+			
+			audio.ontimeupdate = updateProgress;
+			audio.onloadedmetadata = updateDuration;
+			audio.onended = playNext;
+			
+			// For debugging
+			audio.oncanplay = function() {
+			  console.log('Audio can play');
+			};
+			
+			audio.onerror = function() {
+			  console.error('Audio error:', audio.error);
+			};
+			
+			// Add Direct Play Test button for debugging
+			const container = document.querySelector('.player-container');
+			const testButton = document.createElement('button');
+			testButton.textContent = 'Direct Play Test';
+			testButton.style.margin = '10px 0';
+			testButton.style.padding = '8px 15px';
+			testButton.style.backgroundColor = '#ff7e00';
+			testButton.style.color = 'white';
+			testButton.style.border = 'none';
+			testButton.style.borderRadius = '4px';
+			testButton.onclick = function() {
+			  directPlay();
+			};
+			container.appendChild(testButton);
+		  }
+		  
+		  // Direct play function (for test button)
+		  function directPlay() {
+			console.log('Direct play clicked');
+			audio.play().then(() => {
+			  console.log('Play successful');
+			  isPlaying = true;
+			  updatePlayButton();
+			  setupVisualization();
+			}).catch(e => {
+			  console.error('Play failed:', e);
+			});
+		  }
+		  
+		  // Setup visualization
+		  function setupVisualization() {
+			if (!audioContext) {
+			  try {
+				audioContext = new (window.AudioContext || window.webkitAudioContext)();
+				analyzer = audioContext.createAnalyser();
+				analyzer.fftSize = 256;
+				
+				// Create source from audio element
+				source = audioContext.createMediaElementSource(audio);
+				source.connect(analyzer);
+				analyzer.connect(audioContext.destination);
+				
+				// Start visualization
+				visualize();
+				
+				console.log('Visualization setup complete');
+			  } catch (e) {
+				console.error('Visualization setup failed:', e);
+			  }
+			} else if (audioContext.state === 'suspended') {
+			  audioContext.resume();
+			}
+		  }
+		  
+		  // Load track
+		  function loadTrack(index) {
+			console.log('Loading track:', index);
+			
+			if (index < 0) index = tracks.length -, 1;
+			if (index >= tracks.length) index = 0;
+			
+			currentTrackIndex = index;
+			
+			// Update audio source
+			audio.src = tracks[index].src;
+			
+			// Update track info
+			trackTitleElement.textContent = tracks[index].title;
+			trackArtistElement.textContent = tracks[index].artist;
+			
+			// Reset progress
+			seekSlider.value = 0;
+			currentTimeElement.textContent = '00:00';
+			
+			// Update playlist active item
+			updateActivePlaylistItem();
+			
+			// If was playing, start the new track
+			if (isPlaying) {
+			  setTimeout(function() {
+				audio.play().then(() => {
+				  setupVisualization();
+				}).catch(e => {
+				  console.error('Play failed:', e);
+				});
+			  }, 100);
+			}
+		  }
+		  
+		  // Play/pause toggle
+		  function togglePlay() {
+			console.log('Toggle play, current state:', audio.paused ? 'paused' : 'playing');
+			
+			if (audio.paused) {
+			  audio.play().then(() => {
+				isPlaying = true;
+				updatePlayButton();
+				setupVisualization();
+			  }).catch(e => {
+				console.error('Play failed:', e);
+			  });
+			} else {
+			  audio.pause();
+			  isPlaying = false;
+			  updatePlayButton();
+			  if (animationFrame) {
+				cancelAnimationFrame(animationFrame);
+			  }
+			}
+		  }
+		  
+		  // Update play/pause button
+		  function updatePlayButton() {
+			playButton.innerHTML = isPlaying ? 
+			  '<i class="fas fa-pause"></i>' : 
+			  '<i class="fas fa-play"></i>';
+		  }
+		  
+		  // Play previous track
+		  function playPrev() {
+			loadTrack(currentTrackIndex - 1);
+			if (isPlaying) {
+			  setTimeout(function() {
+				audio.play().then(() => {
+				  setupVisualization();
+				});
+			  }, 100);
+			}
+		  }
+		  
+		  // Play next track
+		  function playNext() {
+			loadTrack(currentTrackIndex + 1);
+			if (isPlaying) {
+			  setTimeout(function() {
+				audio.play().then(() => {
+				  setupVisualization();
+				});
+			  }, 100);
+			}
+		  }
+		  
+		  // Seek to position
+		  function seekTo() {
+			if (!isNaN(audio.duration)) {
+			  audio.currentTime = seekSlider.value;
+			}
+		  }
+		  
+		  // Set volume
+		  function setVolume() {
+			audio.volume = volumeSlider.value;
+		  }
+		  
+		  // Update progress bar
+		  function updateProgress() {
+			if (!isNaN(audio.duration)) {
+			  seekSlider.value = audio.currentTime;
+			  seekSlider.max = audio.duration;
+			  currentTimeElement.textContent = formatTime(audio.currentTime);
+			  
+			  // Update slider background for progress
+			  const percent = (audio.currentTime / audio.duration) * 100;
+			  seekSlider.style.background = `linear-gradient(to right, var(--accent-color) 0%, var(--accent-color) ${percent}%, var(--medium-gray) ${percent}%, var(--medium-gray) 100%)`;
+			}
+		  }
+		  
+		  // Update duration display
+		  function updateDuration() {
+			if (!isNaN(audio.duration)) {
+			  durationElement.textContent = formatTime(audio.duration);
+			  seekSlider.max = audio.duration;
+			}
+		  }
+		  
+		  // Format time in MM:SS
+		  function formatTime(time) {
+			const minutes = Math.floor(time / 60) || 0;
+			const seconds = Math.floor(time % 60) || 0;
+			return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+		  }
+		  
+		  // Create playlist items
+		  function createPlaylist() {
+			playlistElement.innerHTML = '';
+			
+			tracks.forEach((track, index) => {
+			  const item = document.createElement('li');
+			  item.className = 'playlist-item';
+			  if (index === currentTrackIndex) {
+				item.classList.add('active');
+			  }
+			  
+			  item.innerHTML = `
+				<div>
+				  <p class="playlist-item-title">${track.title}</p>
+				  <p class="playlist-item-artist">${track.artist}</p>
+				</div>
+			  `;
+			  
+			  item.onclick = function() {
+				loadTrack(index);
+				if (!isPlaying) {
+				  isPlaying = true;
+				  updatePlayButton();
+				}
+				setTimeout(function() {
+				  audio.play().then(() => {
+					setupVisualization();
+				  });
+				}, 100);
+			  };
+			  
+			  playlistElement.appendChild(item);
+			});
+		  }
+		  
+		  // Update active playlist item
+		  function updateActivePlaylistItem() {
+			const items = playlistElement.querySelectorAll('.playlist-item');
+			
+			items.forEach((item, index) => {
+			  if (index === currentTrackIndex) {
+				item.classList.add('active');
+			  } else {
+				item.classList.remove('active');
+			  }
+			});
+		  }
+		  
+		  // Toggle playlist visibility
+		  function togglePlaylist() {
+			if (playlistContainer.style.display === 'none') {
+			  playlistContainer.style.display = 'block';
+			  playlistToggle.innerHTML = '<i class="fas fa-times"></i>';
+			} else {
+			  playlistContainer.style.display = 'none';
+			  playlistToggle.innerHTML = '<i class="fas fa-list"></i>';
+			}
+		  }
+		  
+		  // Visualize audio
+		  function visualize() {
+			if (!analyzer || !visualizer) return;
+			
+			const canvas = visualizer;
+			const canvasCtx = canvas.getContext('2d');
+			const bufferLength = analyzer.frequencyBinCount;
+			const dataArray = new Uint8Array(bufferLength);
+			
+			const WIDTH = canvas.width;
+			const HEIGHT = canvas.height;
+			
+			canvasCtx.clearRect(0, 0, WIDTH, HEIGHT);
+			
+			function draw() {
+			  animationFrame = requestAnimationFrame(draw);
+			  
+			  analyzer.getByteFrequencyData(dataArray);
+			  
+			  canvasCtx.fillStyle = 'rgba(25, 25, 25, 0.2)';
+			  canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+			  
+			  const barWidth = (WIDTH / bufferLength) * 2.5;
+			  let barHeight;
+			  let x = 0;
+			  
+			  for (let i = 0; i < bufferLength; i++) {
+				barHeight = (dataArray[i] / 255) * HEIGHT;
+				
+				// Create gradient for bars
+				const gradient = canvasCtx.createLinearGradient(0, HEIGHT, 0, HEIGHT - barHeight);
+				gradient.addColorStop(0, '#ff7e00');  // Orange accent color
+				gradient.addColorStop(1, '#e57200');  // Slightly darker orange
+				
+				canvasCtx.fillStyle = gradient;
+				canvasCtx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
+				
+				x += barWidth + 1;
+			  }
+			}
+			
+			draw();
+		  }
+		  
+		  // Initialize player
+		  init();
+		});
     </script>
 </body>
 </html>
