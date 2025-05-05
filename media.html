@@ -1415,7 +1415,7 @@
 		  function loadTrack(index) {
 			console.log('Loading track:', index);
 			
-			if (index < 0) index = tracks.length -, 1;
+			if (index < 0) index = tracks.length - 1;
 			if (index >= tracks.length) index = 0;
 			
 			currentTrackIndex = index;
