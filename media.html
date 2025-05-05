@@ -1676,114 +1676,59 @@ document.addEventListener('DOMContentLoaded', function() {
   const durationElement = document.getElementById('duration');
   const trackTitleElement = document.getElementById('track-title');
   const trackArtistElement = document.getElementById('track-artist');
-  
-  // Add a debug output div
-  const playerContainer = document.querySelector('.player-container');
-  const debugDiv = document.createElement('div');
-  debugDiv.style.margin = '10px 0';
-  debugDiv.style.padding = '10px';
-  debugDiv.style.backgroundColor = 'rgba(0,0,0,0.2)';
-  debugDiv.style.borderRadius = '5px';
-  debugDiv.style.fontSize = '12px';
-  debugDiv.innerHTML = '<p>Player Debug Info:</p><div id="debug-output"></div>';
-  playerContainer.appendChild(debugDiv);
-  
-  const debugOutput = document.getElementById('debug-output');
-  
-  function logDebug(message) {
-    const logEntry = document.createElement('div');
-    logEntry.textContent = new Date().toLocaleTimeString() + ': ' + message;
-    debugOutput.appendChild(logEntry);
-    console.log(message);
-  }
-  
-  logDebug('Player initialized');
-  
-  // Track list - Make sure these filenames are exactly correct
-  const tracks = [
-    {
-      title: 'Bach - Prelude in C',
-      artist: 'Classical',
-      src: 'overreact.ogg' // Adjust to match your actual filename
-    },
-    {
-      title: 'Moonlight Sonata',
-      artist: 'Beethoven',
-      src: 'overreact.ogg' // Adjust to match your actual filename
-    },
-    {
-      title: 'Für Elise',
-      artist: 'Beethoven',
-      src: 'overreact.ogg' // Adjust to match your actual filename
-    }
-  ];
+  const playlistToggle = document.getElementById('playlist-toggle');
+  const playlistContainer = document.getElementById('playlist-container');
+  const playlistElement = document.getElementById('playlist');
   
   // State
   let isPlaying = false;
   let currentTrackIndex = 0;
   
+  // Track list
+  const tracks = [
+    {
+      title: 'Bach - Prelude in CD',
+      artist: 'Classical',
+      src: 'overreact.ogg' // Using your actual filename
+    },
+    {
+      title: 'Moonlight Sonata',
+      artist: 'Beethoven',
+      src: 'overreact.ogg' // Using the same file for testing
+    },
+    {
+      title: 'Für Elise',
+      artist: 'Beethoven',
+      src: 'overreact.ogg' // Using the same file for testing
+    }
+  ];
+  
   // Initialize
   function init() {
-    logDebug('Initializing player');
-    
     // Set initial track
     loadTrack(currentTrackIndex);
     
     // Set initial volume
     audio.volume = volumeSlider.value;
     
-    // Add event listeners
-    playButton.addEventListener('click', togglePlay);
-    prevButton.addEventListener('click', playPrev);
-    nextButton.addEventListener('click', playNext);
-    seekSlider.addEventListener('input', seekTo);
-    volumeSlider.addEventListener('input', setVolume);
+    // Create playlist items
+    createPlaylist();
     
-    audio.addEventListener('timeupdate', updateProgress);
-    audio.addEventListener('loadedmetadata', function() {
-      logDebug('Audio metadata loaded, duration: ' + audio.duration);
-      updateDuration();
-    });
-    audio.addEventListener('ended', playNext);
-    audio.addEventListener('error', function(e) {
-      logDebug('Audio error: ' + audio.error.code);
-      switch(audio.error.code) {
-        case 1: logDebug('MEDIA_ERR_ABORTED: Fetching process aborted'); break;
-        case 2: logDebug('MEDIA_ERR_NETWORK: Network error'); break;
-        case 3: logDebug('MEDIA_ERR_DECODE: Decoding error'); break;
-        case 4: logDebug('MEDIA_ERR_SRC_NOT_SUPPORTED: Format not supported'); break;
-        default: logDebug('Unknown error'); break;
-      }
-    });
+    // Event listeners - THE KEY DIFFERENCE IS HERE!
+    // We're using simpler event handling
+    playButton.onclick = togglePlay;
+    prevButton.onclick = playPrev;
+    nextButton.onclick = playNext;
+    seekSlider.oninput = seekTo;
+    volumeSlider.oninput = setVolume;
+    playlistToggle.onclick = togglePlaylist;
     
-    audio.addEventListener('canplay', function() {
-      logDebug('Audio can play');
-    });
+    audio.ontimeupdate = updateProgress;
+    audio.onloadedmetadata = updateDuration;
+    audio.onended = playNext;
     
-    audio.addEventListener('waiting', function() {
-      logDebug('Audio waiting for data');
-    });
-    
-    // Add a test button
-    const testButton = document.createElement('button');
-    testButton.innerText = 'Test Direct Audio';
-    testButton.style.padding = '8px 15px';
-    testButton.style.margin = '10px 0';
-    testButton.style.backgroundColor = '#ff7e00';
-    testButton.style.color = 'white';
-    testButton.style.border = 'none';
-    testButton.style.borderRadius = '4px';
-    testButton.addEventListener('click', function() {
-      // Create a native audio element for testing
-      const testAudio = document.createElement('audio');
-      testAudio.controls = true;
-      testAudio.style.width = '100%';
-      testAudio.style.marginTop = '10px';
-      testAudio.src = tracks[currentTrackIndex].src;
-      debugDiv.appendChild(testAudio);
-      logDebug('Added test audio player with src: ' + testAudio.src);
-    });
-    debugDiv.appendChild(testButton);
+    // Force load the audio to ensure it's ready
+    audio.load();
   }
   
   // Load track
@@ -1793,15 +1738,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     currentTrackIndex = index;
     
-    // Stop current track if playing
-    if (isPlaying) {
-      audio.pause();
-    }
-    
-    logDebug('Loading track: ' + tracks[index].title + ' - ' + tracks[index].src);
-    
-    // Update audio source
+    // Simply update the source
     audio.src = tracks[index].src;
+    audio.load(); // Force load
     
     // Update track info
     trackTitleElement.textContent = tracks[index].title;
@@ -1811,42 +1750,28 @@ document.addEventListener('DOMContentLoaded', function() {
     seekSlider.value = 0;
     currentTimeElement.textContent = '00:00';
     
+    // Update playlist active item
+    updateActivePlaylistItem();
+    
     // If was playing, start the new track
     if (isPlaying) {
-      playAudio();
+      setTimeout(function() { // Give it a moment to load
+        audio.play();
+      }, 100);
     }
   }
   
-  // Play audio
-  function playAudio() {
-    logDebug('Attempting to play audio');
-    
-    const playPromise = audio.play();
-    
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-        logDebug('Playback started successfully');
-        isPlaying = true;
-        updatePlayButton();
-      }).catch(e => {
-        logDebug('Playback failed: ' + e.message);
-        isPlaying = false;
-        updatePlayButton();
-      });
-    }
-  }
-  
-  // Play/pause toggle
+  // Play/pause toggle - SIMPLIFIED
   function togglePlay() {
     if (audio.paused) {
-      logDebug('Play button clicked');
-      playAudio();
+      // Simple play approach
+      audio.play();
+      isPlaying = true;
     } else {
-      logDebug('Pause button clicked');
       audio.pause();
       isPlaying = false;
-      updatePlayButton();
     }
+    updatePlayButton();
   }
   
   // Update play/pause button
@@ -1862,7 +1787,9 @@ document.addEventListener('DOMContentLoaded', function() {
   function playPrev() {
     loadTrack(currentTrackIndex - 1);
     if (isPlaying) {
-      playAudio();
+      setTimeout(function() {
+        audio.play();
+      }, 100);
     }
   }
   
@@ -1870,7 +1797,9 @@ document.addEventListener('DOMContentLoaded', function() {
   function playNext() {
     loadTrack(currentTrackIndex + 1);
     if (isPlaying) {
-      playAudio();
+      setTimeout(function() {
+        audio.play();
+      }, 100);
     }
   }
   
@@ -1884,7 +1813,6 @@ document.addEventListener('DOMContentLoaded', function() {
   // Set volume
   function setVolume() {
     audio.volume = volumeSlider.value;
-    logDebug('Volume set to: ' + audio.volume);
   }
   
   // Update progress bar
@@ -1915,8 +1843,87 @@ document.addEventListener('DOMContentLoaded', function() {
     return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
   
+  // Create playlist items - simplified
+  function createPlaylist() {
+    playlistElement.innerHTML = '';
+    
+    tracks.forEach((track, index) => {
+      const item = document.createElement('li');
+      item.className = 'playlist-item';
+      if (index === currentTrackIndex) {
+        item.classList.add('active');
+      }
+      
+      item.innerHTML = `
+        <div>
+          <p class="playlist-item-title">${track.title}</p>
+          <p class="playlist-item-artist">${track.artist}</p>
+        </div>
+      `;
+      
+      item.onclick = function() {
+        loadTrack(index);
+        if (isPlaying) {
+          setTimeout(function() {
+            audio.play();
+          }, 100);
+        } else {
+          isPlaying = true;
+          setTimeout(function() {
+            audio.play();
+          }, 100);
+          updatePlayButton();
+        }
+      };
+      
+      playlistElement.appendChild(item);
+    });
+  }
+  
+  // Update active playlist item - simplified
+  function updateActivePlaylistItem() {
+    const items = playlistElement.querySelectorAll('.playlist-item');
+    
+    items.forEach((item, index) => {
+      if (index === currentTrackIndex) {
+        item.classList.add('active');
+      } else {
+        item.classList.remove('active');
+      }
+    });
+  }
+  
+  // Toggle playlist visibility
+  function togglePlaylist() {
+    if (playlistContainer.style.display === 'none') {
+      playlistContainer.style.display = 'block';
+      playlistToggle.innerHTML = '<i class="fas fa-times"></i>';
+    } else {
+      playlistContainer.style.display = 'none';
+      playlistToggle.innerHTML = '<i class="fas fa-list"></i>';
+    }
+  }
+  
   // Initialize player
   init();
+  
+  // Add a button to test direct play
+  const container = document.querySelector('.player-container');
+  const testButton = document.createElement('button');
+  testButton.textContent = 'Direct Play Test';
+  testButton.style.margin = '10px 0';
+  testButton.style.padding = '8px 15px';
+  testButton.style.backgroundColor = '#ff7e00';
+  testButton.style.color = 'white';
+  testButton.style.border = 'none';
+  testButton.style.borderRadius = '4px';
+  testButton.onclick = function() {
+    // Just try to directly play the audio element
+    audio.play();
+    isPlaying = true;
+    updatePlayButton();
+  };
+  container.appendChild(testButton);
 });
     </script>
 </body>
